@@ -61,7 +61,7 @@ In this scenario you will run both the backend and frontend locally on your lapt
    - Build the Java code: `sam build`
    - Create an S3 bucket: `aws s3 mb s3://nss-s3-c##-u5-project-YOUR.NAME` (Replace `c##` with your cohort number, e.g. `c01` for Cohort 1, and replace `YOUR.NAME` with your first and last name.)
       > **TIP:** You only need to do this once.
-   - Deploy the SAM template: `sam deploy --s3-bucket BUCKET_FROM_ABOVE --parameter-overrides "S3Bucket=BUCKET_FROM_ABOVE"`
+   - Deploy the SAM template: `sam deploy --s3-bucket BUCKET_FROM_ABOVE --parameter-overrides S3Bucket=BUCKET_FROM_ABOVE FrontendDeployment=local`
       > **NOTE:** _Yes you have to provide the same S3 bucket name twice. Yes this is annoying._
    - Create some sample data: `aws dynamodb batch-write-item --request-items file://data/data.json`
       > **TIP:** You only need to do this once.
