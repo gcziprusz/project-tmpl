@@ -39,6 +39,20 @@ _Repeat this process choosing your group account and the role `SE_Unit_5_Group_T
 
 We'll do most of our development locally with `sam` like we've been doing so far. Requests that access and/or manipulate data in DynamoDB will continue to reach out to the DynamoDB tables in AWS. There are 3 different scenarios that you will use. You should work through each Scenario in order the first time through to configure all the necessary parts.
 
+### Prerequisites
+
+We need to install something called NodeJS before we can run some of the commands below (the `npm` ones).
+
+- On Windows / WSL:
+```shell
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
+sudo apt-get install -y nodejs
+```
+- On macOS:
+```shell
+brew install node
+```
+
 ### Scenario 1: Local Backend, Local Frontend
 
 In this scenario you will run both the backend and frontend locally on your laptop. You should use your **individual** AWS account in this scenario so that all data in DDB is yours and yours alone. Even though we'll be running the backend locally, we need some DynamoDB tables created in AWS so the setup for this involves some remote AWS configuration.
@@ -55,6 +69,7 @@ In this scenario you will run both the backend and frontend locally on your lapt
       > _The sample data provided here is specific to the Music Playlist Service, you will either delete or replace this when you start your own project, but it's quite useful for now when you're trying to get everything working._
    - Run the local API: `sam local start-api --warm-containers LAZY`
 2. Run a local web server (aka the frontend):
+   - CD into the web directory: `cd web`
    - Install dependencies : `npm install`
        > **TIP:** You only need to do this once - _unless_ you add/change Javascript dependencies.
    - Run the local server: `npm run run-local`
@@ -76,8 +91,10 @@ In this scenario you will deploy the backend to AWS and run the frontend locally
     jq '.StackResourceDetail.PhysicalResourceId'
     ```
     > **TIP:** This will be a 10 digit alphanumeric string. Alternatively you can login to the AWS web management console and get the ID from there.
-3. Run a local web server (aka the frontend): `U5_API_RESOURCE_ID=ID_FROM_ABOVE npm run run-local`
-    > **TIP:** The string `U5_API_RESOURCE_ID` is an [environment variable](https://en.wikipedia.org/wiki/Environment_variable) that the frontend configuration is looking for to know whether it should connect to the localhost or a remote host.
+3. Run a local web server (aka the frontend):
+   - CD into the web directory: `cd web`
+   - `U5_API_RESOURCE_ID=ID_FROM_ABOVE npm run run-local`
+     > **TIP:** The string `U5_API_RESOURCE_ID` is an [environment variable](https://en.wikipedia.org/wiki/Environment_variable) that the frontend configuration is looking for to know whether it should connect to the localhost or a remote host.
 
 After doing all of this, you will have a server running on port `8000` - you can access it by going to [http://localhost:8000](http://localhost:8000) in your browser. The difference from Scenario 1 is that now the Lambda functions are running in AWS. If you open the developer tools in your browser you will see requests being made to a URL like `https://GATEWAY_RESOURCE_ID.execute-api.us-east-2.amazonaws.com/Prod`. Once you have made several requests this should be noticeably faster than running the code locally on your laptop.
 
