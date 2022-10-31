@@ -84,7 +84,7 @@ In this scenario you will deploy the backend to AWS and run the frontend locally
 
 1. Deploy the Lambda service (aka the backend):
    - Build the Java code: `sam build`
-   - Deploy it: `sam deploy --s3-bucket BUCKET_FROM_ABOVE --parameter-overrides "S3Bucket=BUCKET_FROM_ABOVE"`
+   - Deploy it: `sam deploy --s3-bucket BUCKET_FROM_ABOVE --parameter-overrides S3Bucket=BUCKET_FROM_ABOVE FrontendDeployment=local`
 2. Get the ID of the API Gateway:
     ```shell
     aws cloudformation describe-stack-resource --stack-name music-playlist-service --logical-resource-id ServerlessRestApi | \

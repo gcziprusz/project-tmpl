@@ -7,6 +7,18 @@ Parameters:
   S3Bucket:
     Type: String
     Description: Parameter to specify the S3 Bucket to use for deployment
+  FrontendDeployment:
+    Default: remote
+    Type: String
+    AllowedValues:
+      - local
+      - remote
+    ConstraintDescription: Must specify 'local' or 'remote' for FrontendDeployment.
+
+Conditions:
+  DeployCloudFront: !Equals
+    - !Ref FrontendDeployment
+    - remote
 
 Globals:
   Function:
@@ -22,12 +34,14 @@ Resources:
 
   CloudFrontOriginAccessIdentity:
     Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
+    Condition: DeployCloudFront
     Properties:
       CloudFrontOriginAccessIdentityConfig:
         Comment: 'Serverless frontend website'
 
   CloudfrontDistribution:
     Type: "AWS::CloudFront::Distribution"
+    Condition: DeployCloudFront
     Properties:
       DistributionConfig:
         Comment: "Cloudfront distribution for serverless website"
@@ -60,6 +74,7 @@ Resources:
 
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
+    Condition: DeployCloudFront
     Properties:
       Bucket: !Ref S3Bucket
       PolicyDocument:
