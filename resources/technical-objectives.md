@@ -99,7 +99,7 @@ The following learning objectives must be included in your project. You should r
 |      |                                      |
 |      |                                      |
 
-**Identify key words to research to accomplish a technical goal | Use sources like sage and stack overflow to solve issues encountered while programming.** Give an example of a search term that your team might have used to find an answer to a technical question/obstacle that your team ran into. List the resource that you found that was helpful.
+**Identify key words to research to accomplish a technical goal. Use sources like Stack Overflow to solve issues encountered while programming.** Give an example of a search term that your team might have used to find an answer to a technical question/obstacle that your team ran into. List the resource that you found that was helpful.
 
 **Search terms:**
 **Helpful resource:**
