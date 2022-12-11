@@ -89,7 +89,8 @@ checkstyle {
 // If we are running the task 'staticchecks', do not ignore failures, otherwise ignore
 checkstyleMain.doFirst {
     //ignoreFailures = !gradle.taskGraph.allTasks.any({ it.name ==~ /.*staticchecks/ })
-    ignoreFailures = true
+    //ignoreFailures = true
+    ignoreFailures = false
 }
 
 check.dependsOn jacocoTestCoverageVerification

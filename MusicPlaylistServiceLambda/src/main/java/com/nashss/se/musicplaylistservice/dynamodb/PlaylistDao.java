@@ -1,18 +1,20 @@
 package com.nashss.se.musicplaylistservice.dynamodb;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.nashss.se.musicplaylistservice.dynamodb.models.Playlist;
 import com.nashss.se.musicplaylistservice.exceptions.PlaylistNotFoundException;
 import com.nashss.se.musicplaylistservice.metrics.MetricsConstants;
 import com.nashss.se.musicplaylistservice.metrics.MetricsPublisher;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Accesses data for a playlist using {@link Playlist} to represent the model in DynamoDB.
@@ -62,11 +64,22 @@ public class PlaylistDao {
         return playlist;
     }
 
+    /**
+     * Perform a search (via a "scan") of the playlist table for playlists matching the given criteria.
+     *
+     * Both "playlistName" and "tags" attributes are searched.
+     * The criteria are an array of Strings. Each element of the array is search individually.
+     * ALL elements of the criteria array must appear in the playlistName or the tags (or both).
+     * Searches are CASE SENSITIVE.
+     *
+     * @param criteria an array of String containing search criteria.
+     * @return a List of Playlist objects that match the search criteria.
+     */
     public List<Playlist> searchPlaylists(String[] criteria) {
         DynamoDBScanExpression dynamoDBScanExpression = new DynamoDBScanExpression();
 
         if (criteria.length > 0) {
-            HashMap<String, AttributeValue> valueMap = new HashMap<>();
+            Map<String, AttributeValue> valueMap = new HashMap<>();
             String valueMapNamePrefix = ":c";
 
             StringBuilder nameFilterExpression = new StringBuilder();

@@ -6,25 +6,26 @@ import com.nashss.se.musicplaylistservice.converters.ModelConverter;
 import com.nashss.se.musicplaylistservice.dynamodb.PlaylistDao;
 import com.nashss.se.musicplaylistservice.dynamodb.models.Playlist;
 import com.nashss.se.musicplaylistservice.models.PlaylistModel;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.inject.Inject;
 import java.util.List;
+import javax.inject.Inject;
 
 import static com.nashss.se.musicplaylistservice.utils.NullUtils.ifNull;
 
 /**
- * Implementation of the GetPlaylistActivity for the MusicPlaylistService's GetPlaylist API.
+ * Implementation of the SearchPlaylistActivity for the MusicPlaylistService's SearchPlaylists API.
  *
- * This API allows the customer to get one of their saved playlists.
+ * This API allows the customer to search for playlists by name or tag.
  */
 public class SearchPlaylistsActivity {
     private final Logger log = LogManager.getLogger();
     private final PlaylistDao playlistDao;
 
     /**
-     * Instantiates a new GetPlaylistActivity object.
+     * Instantiates a new SearchPlaylistsActivity object.
      *
      * @param playlistDao PlaylistDao to access the playlist table.
      */
@@ -34,14 +35,13 @@ public class SearchPlaylistsActivity {
     }
 
     /**
-     * This method handles the incoming request by retrieving the playlist from the database.
+     * This method handles the incoming request by searching for playlist from the database.
      * <p>
-     * It then returns the playlist.
-     * <p>
-     * If the playlist does not exist, this should throw a PlaylistNotFoundException.
+     * It then returns the matching playlists, or an empty result list if none are found.
      *
-     * @param searchPlaylistsRequest request object containing the playlist ID
-     * @return getPlaylistResult result object containing the API defined {@link PlaylistModel}
+     * @param searchPlaylistsRequest request object containing the search criteria
+     * @return searchPlaylistsResult result object containing the playlists that match the
+     *         search criteria.
      */
     public SearchPlaylistsResult handleRequest(final SearchPlaylistsRequest searchPlaylistsRequest) {
         log.info("Received SearchPlaylistsRequest {}", searchPlaylistsRequest);
