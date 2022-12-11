@@ -33,7 +33,7 @@ public class Playlist {
         this.id = id;
     }
 
-    @DynamoDBAttribute(attributeName = "name")
+    @DynamoDBAttribute(attributeName = "playlistName") // "name" is a reserved word in DDB
     public String getName() {
         return name;
     }

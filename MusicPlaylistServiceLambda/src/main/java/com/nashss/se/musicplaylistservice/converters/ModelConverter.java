@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Converts between Data and Coral models.
+ * Converts between Data and API models.
  */
 public class ModelConverter {
     /**
@@ -53,10 +53,26 @@ public class ModelConverter {
      */
     public List<SongModel> toSongModelList(List<AlbumTrack> albumTracks) {
         List<SongModel> songModels = new ArrayList<>();
+
         for (AlbumTrack albumTrack : albumTracks) {
             songModels.add(toSongModel(albumTrack));
         }
 
         return songModels;
+    }
+
+    /**
+     * Converts a list of Playlists to a list of PlaylistModels.
+     * @param playlists The Playlists to convert to PlaylistModels
+     * @return The converted list of PlaylistModels
+     */
+    public List<PlaylistModel> toPlaylistModelList(List<Playlist> playlists) {
+        List<PlaylistModel> playlistModels = new ArrayList<>();
+
+        for (Playlist playlist : playlists) {
+            playlistModels.add(toPlaylistModel(playlist));
+        }
+
+        return playlistModels;
     }
 }

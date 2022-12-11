@@ -1,11 +1,8 @@
 package com.nashss.se.musicplaylistservice.dependency;
 
-import com.nashss.se.musicplaylistservice.activity.AddSongToPlaylistActivity;
-import com.nashss.se.musicplaylistservice.activity.CreatePlaylistActivity;
-import com.nashss.se.musicplaylistservice.activity.GetPlaylistActivity;
-import com.nashss.se.musicplaylistservice.activity.GetPlaylistSongsActivity;
-import com.nashss.se.musicplaylistservice.activity.UpdatePlaylistActivity;
+import com.nashss.se.musicplaylistservice.activity.*;
 
+import com.nashss.se.musicplaylistservice.activity.requests.SearchPlaylistsRequest;
 import dagger.Component;
 
 import javax.inject.Singleton;
@@ -34,6 +31,12 @@ public interface ServiceComponent {
      * @return GetPlaylistActivity
      */
     GetPlaylistActivity provideGetPlaylistActivity();
+
+    /**
+     * Provides the relevant activity.
+     * @return GetPlaylistActivity
+     */
+    SearchPlaylistsActivity provideSearchPlaylistsActivity();
 
     /**
      * Provides the relevant activity.
