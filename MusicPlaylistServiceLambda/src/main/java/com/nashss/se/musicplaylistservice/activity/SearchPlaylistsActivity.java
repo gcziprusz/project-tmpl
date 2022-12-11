@@ -1,5 +1,6 @@
 package com.nashss.se.musicplaylistservice.activity;
 
+import com.amazonaws.util.StringUtils;
 import com.nashss.se.musicplaylistservice.activity.requests.SearchPlaylistsRequest;
 import com.nashss.se.musicplaylistservice.activity.results.SearchPlaylistsResult;
 import com.nashss.se.musicplaylistservice.converters.ModelConverter;
@@ -17,7 +18,7 @@ import static com.nashss.se.musicplaylistservice.utils.NullUtils.ifNull;
 
 /**
  * Implementation of the SearchPlaylistActivity for the MusicPlaylistService's SearchPlaylists API.
- *
+ * <p>
  * This API allows the customer to search for playlists by name or tag.
  */
 public class SearchPlaylistsActivity {
@@ -41,14 +42,17 @@ public class SearchPlaylistsActivity {
      *
      * @param searchPlaylistsRequest request object containing the search criteria
      * @return searchPlaylistsResult result object containing the playlists that match the
-     *         search criteria.
+     * search criteria.
      */
     public SearchPlaylistsResult handleRequest(final SearchPlaylistsRequest searchPlaylistsRequest) {
         log.info("Received SearchPlaylistsRequest {}", searchPlaylistsRequest);
 
-        String[] criteria = ifNull(searchPlaylistsRequest.getCriteria(), "").split("\\s");
+        String criteria = ifNull(searchPlaylistsRequest.getCriteria(), "");
+        String[] criteriaArray = criteria.isBlank()
+                ? new String[0]
+                : criteria.split("\\s");
 
-        List<Playlist> results = playlistDao.searchPlaylists(criteria);
+        List<Playlist> results = playlistDao.searchPlaylists(criteriaArray);
         List<PlaylistModel> playlistModels = new ModelConverter().toPlaylistModelList(results);
 
         return SearchPlaylistsResult.builder()

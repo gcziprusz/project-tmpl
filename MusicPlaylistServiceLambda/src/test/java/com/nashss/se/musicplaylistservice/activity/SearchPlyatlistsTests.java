@@ -10,11 +10,14 @@ import com.nashss.se.musicplaylistservice.dynamodb.models.Playlist;
 import com.nashss.se.musicplaylistservice.models.PlaylistModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -59,6 +62,25 @@ public class SearchPlyatlistsTests {
         }
     }
 
+    @Test
+    public void handleRequest_withNullCriteria_isIdenticalToEmptyCriteria() {
+        // GIVEN
+        String criteria = null;
+        ArgumentCaptor<String[]> criteriaArray = ArgumentCaptor.forClass(String[].class);
+
+        when(playlistDao.searchPlaylists(criteriaArray.capture())).thenReturn(List.of());
+
+        SearchPlaylistsRequest request = SearchPlaylistsRequest.builder()
+                .withCriteria(criteria)
+                .build();
+
+        // WHEN
+        SearchPlaylistsResult result = searchPlaylistsActivity.handleRequest(request);
+
+        // THEN
+        assertEquals(0, criteriaArray.getValue().length, "Criteria Array should be empty");
+    }
+
     private static Playlist newPlaylist(String id, String name, List<String> tags) {
         Playlist playlist = new Playlist();
 
@@ -66,6 +88,7 @@ public class SearchPlyatlistsTests {
         playlist.setName(name);
         playlist.setTags(Sets.newHashSet(tags));
 
+        // the test code doesn't need these properties to be distinct.
         playlist.setCustomerId("a customer id");
         playlist.setSongCount(0);
 
