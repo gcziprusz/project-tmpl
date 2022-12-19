@@ -36,7 +36,7 @@ export default class Header extends BindingClass {
     addHeaderToPage() {
         document.getElementById('header').innerHTML = `
             <div class="site-title">
-                <a class="header_home" href="index.html">Unit 5 Playlists</a>
+                <a class="header_home" href="index.html">Playlists</a>
             </div>
             <div id="user">${this.dataStore.get('username')}</div>
         `;
