@@ -181,7 +181,7 @@ Resources:
         MusicPlaylistService:
           Type: Api
           Properties:
-            Path: /playlists
+            Path: /playlists/search
             Method: get
 
   GetPlaylistSongsLambda:
