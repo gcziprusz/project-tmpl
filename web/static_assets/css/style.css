@@ -102,3 +102,19 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Lists_and_Counters/Using_CS
     position: absolute;
     margin-left: -40px;
 }
+
+.hidden {
+    display: none;
+}
+
+
+/* table styles */ 
+
+th, td {
+    padding: 15px;
+    text-align: left;
+}
+
+th {
+    border-bottom: 1px solid black;
+}
