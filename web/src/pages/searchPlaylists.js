@@ -72,8 +72,8 @@ class SearchPlaylists extends BindingClass {
             const results = await this.client.search(searchCriteria);
 
             this.dataStore.setState({
-                [SEARCH_CRITERIA_KEY] : searchCriteria,
-                [SEARCH_RESULTS_KEY] : results,
+                [SEARCH_CRITERIA_KEY]: searchCriteria,
+                [SEARCH_RESULTS_KEY]: results,
             });
         } else {
             this.dataStore.setState(EMPTY_DATASTORE_STATE);
@@ -97,7 +97,7 @@ class SearchPlaylists extends BindingClass {
             searchResultsDisplay.innerHTML = '';
         } else {
             searchResultsContainer.classList.remove('hidden');
-            searchCriteriaDisplay.innerHTML = searchCriteria;
+            searchCriteriaDisplay.innerHTML = `"${searchCriteria}"`;
             searchResultsDisplay.innerHTML = this.getHTMLForSearchResults(searchResults);
         }
     }
@@ -116,13 +116,18 @@ class SearchPlaylists extends BindingClass {
         for (const res of searchResults) {
             html += `
             <tr>
-                <td>${res.name}</td><td>${res.songCount}</td><td>${res.tags.join(', ')}</td>
+                <td>
+                    <a href="playlist.html?id=${res.id}">${res.name}</a>
+                </td>
+                <td>${res.songCount}</td>
+                <td>${res.tags.join(', ')}</td>
             </tr>`;
         }
         html += '</table>';
 
         return html;
     }
+
 }
 
 /**
