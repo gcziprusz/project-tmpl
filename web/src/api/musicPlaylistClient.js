@@ -62,6 +62,15 @@ export default class MusicPlaylistClient extends BindingClass {
         this.authenticator.logout();
     }
 
+    async getTokenOrThrow(unauthenticatedErrorMessage) {
+        const isLoggedIn = await this.authenticator.isUserLoggedIn();
+        if (!isLoggedIn) {
+            throw new Error(unauthenticatedErrorMessage);
+        }
+
+        return await this.authenticator.getUserToken();
+    }
+
     /**
      * Gets the playlist for the given ID.
      * @param id Unique identifier for a playlist
@@ -102,10 +111,15 @@ export default class MusicPlaylistClient extends BindingClass {
      */
     async createPlaylist(name, customerId, tags, errorCallback) {
         try {
+            const token = await this.getTokenOrThrow("Only authenticated users can create playlists.");
             const response = await this.axiosClient.post(`playlists`, {
                 name: name,
                 customerId: customerId,
                 tags: tags
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
             return response.data.playlist;
         } catch (error) {
@@ -122,10 +136,15 @@ export default class MusicPlaylistClient extends BindingClass {
      */
     async addSongToPlaylist(id, asin, trackNumber, errorCallback) {
         try {
+            const token = await this.getTokenOrThrow("Only authenticated users can add a song to a playlist.");
             const response = await this.axiosClient.post(`playlists/${id}/songs`, {
                 id: id,
                 asin: asin,
                 trackNumber: trackNumber
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
             return response.data.songList;
         } catch (error) {
@@ -159,8 +178,8 @@ export default class MusicPlaylistClient extends BindingClass {
      */
     handleError(error, errorCallback) {
         console.error(error);
-        if (error.response.data.message !== undefined) {
-            console.error(error.response.data.message)
+        if (error?.response?.data?.message) {
+            console.error(error?.response?.data?.message)
         }
         if (errorCallback) {
             errorCallback(error);

@@ -20,6 +20,7 @@ class CreatePlaylist extends BindingClass {
      */
     mount() {
         document.getElementById('create').addEventListener('click', this.submit);
+        document.getElementById('create-playlist-form').addEventListener('click', this.submit);
 
         this.header.addHeaderToPage();
 
@@ -30,7 +31,9 @@ class CreatePlaylist extends BindingClass {
      * Method to run when the create playlist submit button is pressed. Call the MusicPlaylistService to create the
      * playlist.
      */
-    async submit() {
+    async submit(evt) {
+        evt.preventDefault();
+        
         document.getElementById('create').innerText = 'Loading...';
 
         const playlistName = document.getElementById('playlist-name').value;
