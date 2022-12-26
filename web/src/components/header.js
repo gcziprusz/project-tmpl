@@ -8,7 +8,10 @@ export default class Header extends BindingClass {
     constructor() {
         super();
 
-        const methodsToBind = ['addHeaderToPage'];
+        const methodsToBind = [
+            'addHeaderToPage', 'createSiteTitle', 'createUserInfoForHeader',
+            'createLoginButton', 'createLoginButton', 'createLogoutButton'
+        ];
         this.bindClassMethods(methodsToBind, this);
 
         this.client = new MusicPlaylistClient();
@@ -29,14 +32,14 @@ export default class Header extends BindingClass {
     }
 
     createSiteTitle() {
-        const homeLink = document.createElement('a');
-        homeLink.classList.add('header_home');
-        homeLink.href = 'index.html';
-        homeLink.innerText = 'Playlists';
+        const homeButton = document.createElement('a');
+        homeButton.classList.add('header_home');
+        homeButton.href = 'index.html';
+        homeButton.innerText = 'Playlists';
 
         const siteTitle = document.createElement('div');
         siteTitle.classList.add('site-title');
-        siteTitle.appendChild(homeLink);
+        siteTitle.appendChild(homeButton);
 
         return siteTitle;
     }
@@ -45,26 +48,33 @@ export default class Header extends BindingClass {
         const userInfo = document.createElement('div');
         userInfo.classList.add('user');
 
-        if (currentUser) {
-            userInfo.innerText = currentUser.username;
-        } else {
-            userInfo.appendChild(this.createLoginLink());
-        }
+        const childContent = currentUser
+            ? this.createLogoutButton(currentUser)
+            : this.createLoginButton();
+
+        userInfo.appendChild(childContent);
 
         return userInfo;
     }
 
-    createLoginLink() {
-        const loginLink = document.createElement('a');
-        loginLink.classList.add('button');
-        loginLink.href = '#';
-        loginLink.innerText = 'Login';
-
-        loginLink.addEventListener('click', async () => {
-            await this.client.login();
-        });
-
-        return loginLink;
+    createLoginButton() {
+        return this.createButton('Login', this.client.login);
     }
 
+    createLogoutButton(currentUser) {
+        return this.createButton(`Logout: ${currentUser.name}`, this.client.logout);
+    }
+
+    createButton(text, clickHandler) {
+        const button = document.createElement('a');
+        button.classList.add('button');
+        button.href = '#';
+        button.innerText = text;
+
+        button.addEventListener('click', async () => {
+            await clickHandler();
+        });
+
+        return button;
+    }
 }

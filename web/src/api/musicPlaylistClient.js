@@ -15,7 +15,7 @@ export default class MusicPlaylistClient extends BindingClass {
     constructor(props = {}) {
         super();
 
-        const methodsToBind = ['clientLoaded', 'getIdentity', 'getPlaylist', 'getPlaylistSongs', 'createPlaylist'];
+        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'getPlaylist', 'getPlaylistSongs', 'createPlaylist'];
         this.bindClassMethods(methodsToBind, this);
 
         this.authenticator = new Authenticator();;
@@ -43,16 +43,12 @@ export default class MusicPlaylistClient extends BindingClass {
     async getIdentity(errorCallback) {
         try {
             const isLoggedIn = await this.authenticator.isUserLoggedIn();
+
             if (!isLoggedIn) {
                 return undefined;
             }
 
-            const userInfo = await this.authenticator.getCurrentUserInfo();
-            const data = {
-                username: userInfo.name,
-                email: userInfo.email,
-            };
-            return data;
+            return await this.authenticator.getCurrentUserInfo();
         } catch (error) {
             this.handleError(error, errorCallback)
         }
@@ -60,6 +56,10 @@ export default class MusicPlaylistClient extends BindingClass {
 
     async login() {
         this.authenticator.login();
+    }
+
+    async logout() {
+        this.authenticator.logout();
     }
 
     /**

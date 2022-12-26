@@ -30,6 +30,10 @@ export default class Authenticator extends BindingClass {
         await Auth.federatedSignIn();
     }
 
+    async logout() {
+        await Auth.signOut();
+    }
+
     configureCognito() {
         Auth.configure({
             userPoolId: 'us-east-2_QTpFlSazv',

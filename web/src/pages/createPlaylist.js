@@ -44,7 +44,7 @@ class CreatePlaylist extends BindingClass {
             tags = tagsText.split(/\s*,\s*/);
         }
 
-        const playlist = await this.client.createPlaylist(playlistName, user.username, tags);
+        const playlist = await this.client.createPlaylist(playlistName, user.email, tags);
         this.dataStore.set('playlist', playlist);
         document.getElementById('create').innerText = 'Create';
     }
