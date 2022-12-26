@@ -20,6 +20,7 @@ public class Playlist {
     private String id;
     private String name;
     private String customerId;
+    private String customerName;
     private Integer songCount;
     private Set<String> tags;
     private List<AlbumTrack> songList;
@@ -50,6 +51,15 @@ public class Playlist {
 
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
+    }
+
+    @DynamoDBAttribute(attributeName = "customerName")
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     @DynamoDBAttribute(attributeName = "songCount")
@@ -115,15 +125,17 @@ public class Playlist {
         }
         Playlist playlist = (Playlist) o;
         return id.equals(playlist.id) &&
-               name.equals(playlist.name) &&
-               customerId.equals(playlist.customerId) &&
-               songCount.equals(playlist.songCount) &&
-               Objects.equals(tags, playlist.tags) &&
-               Objects.equals(songList, playlist.songList);
+                name.equals(playlist.name) &&
+                customerId.equals(playlist.customerId) &&
+                customerName.equals(playlist.customerName) &&
+                songCount.equals(playlist.songCount) &&
+                Objects.equals(tags, playlist.tags) &&
+                Objects.equals(songList, playlist.songList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, customerId, songCount, tags, songList);
+        return Objects.hash(id, name, customerId, customerName, songCount, tags, songList);
     }
+
 }

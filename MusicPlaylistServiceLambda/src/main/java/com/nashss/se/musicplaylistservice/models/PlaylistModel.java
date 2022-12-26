@@ -9,13 +9,15 @@ public class PlaylistModel {
     private final String id;
     private final String name;
     private final String customerId;
+    private final String customerName;
     private final int songCount;
     private final List<String> tags;
 
-    private PlaylistModel(String id, String name, String customerId, int songCount, List<String> tags) {
+    private PlaylistModel(String id, String name, String customerId, String customerName, int songCount, List<String> tags) {
         this.id = id;
         this.name = name;
         this.customerId = customerId;
+        this.customerName = customerName;
         this.songCount = songCount;
         this.tags = tags;
     }
@@ -48,16 +50,19 @@ public class PlaylistModel {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
         PlaylistModel that = (PlaylistModel) o;
+
         return songCount == that.songCount &&
-                id.equals(that.id) &&
-                customerId.equals(that.customerId) &&
-                tags.equals(that.tags);
+                Objects.equals(id, that.id) && Objects.equals(name, that.name) &&
+                Objects.equals(customerId, that.customerId) &&
+                Objects.equals(customerName, that.customerName) &&
+                Objects.equals(tags, that.tags);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, customerId, songCount, tags);
+        return Objects.hash(id, name, customerId, customerName, songCount, tags);
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -65,10 +70,15 @@ public class PlaylistModel {
         return new Builder();
     }
 
+    public String getCustomerName() {
+        return customerName;
+    }
+
     public static class Builder {
         private String id;
         private String name;
         private String customerId;
+        private String customerName;
         private int songCount;
         private List<String> tags;
 
@@ -87,6 +97,11 @@ public class PlaylistModel {
             return this;
         }
 
+        public Builder withCustomerName(String customerName) {
+            this.customerName = customerName;
+            return this;
+        }
+
         public Builder withSongCount(int songCount) {
             this.songCount = songCount;
             return this;
@@ -98,7 +113,7 @@ public class PlaylistModel {
         }
 
         public PlaylistModel build() {
-            return new PlaylistModel(id, name, customerId, songCount, tags);
+            return new PlaylistModel(id, name, customerId, customerName, songCount, tags);
         }
     }
 }

@@ -109,12 +109,13 @@ export default class MusicPlaylistClient extends BindingClass {
      * @param errorCallback (Optional) A function to execute if the call fails.
      * @returns The playlist that has been created.
      */
-    async createPlaylist(name, customerId, tags, errorCallback) {
+    async createPlaylist(name, customer, tags, errorCallback) {
         try {
             const token = await this.getTokenOrThrow("Only authenticated users can create playlists.");
             const response = await this.axiosClient.post(`playlists`, {
                 name: name,
-                customerId: customerId,
+                customerId: customer.email,
+                customerName: customer.name,
                 tags: tags
             }, {
                 headers: {

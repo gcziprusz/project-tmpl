@@ -120,7 +120,7 @@ class SearchPlaylists extends BindingClass {
                     <a href="playlist.html?id=${res.id}">${res.name}</a>
                 </td>
                 <td>${res.songCount}</td>
-                <td>${res.tags.join(', ')}</td>
+                <td>${res.tags?.join(', ')}</td>
             </tr>`;
         }
         html += '</table>';

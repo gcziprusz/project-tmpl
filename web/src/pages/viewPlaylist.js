@@ -53,6 +53,7 @@ class ViewPlaylist extends BindingClass {
         }
 
         document.getElementById('playlist-name').innerText = playlist.name;
+        document.getElementById('playlist-owner').innerText = playlist.customerName;
 
         let tagHtml = '';
         let tag;

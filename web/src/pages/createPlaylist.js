@@ -20,7 +20,6 @@ class CreatePlaylist extends BindingClass {
      */
     mount() {
         document.getElementById('create').addEventListener('click', this.submit);
-        document.getElementById('create-playlist-form').addEventListener('click', this.submit);
 
         this.header.addHeaderToPage();
 
@@ -33,8 +32,14 @@ class CreatePlaylist extends BindingClass {
      */
     async submit(evt) {
         evt.preventDefault();
-        
-        document.getElementById('create').innerText = 'Loading...';
+
+        const errorMessageDisplay = document.getElementById('error-message');
+        errorMessageDisplay.innerText = ``;
+        errorMessageDisplay.classList.add('hidden');
+
+        const createButton = document.getElementById('create');
+        const origButtonText = createButton.innerText;
+        createButton.innerText = 'Loading...';
 
         const playlistName = document.getElementById('playlist-name').value;
         const user = await this.client.getIdentity();
@@ -47,9 +52,12 @@ class CreatePlaylist extends BindingClass {
             tags = tagsText.split(/\s*,\s*/);
         }
 
-        const playlist = await this.client.createPlaylist(playlistName, user.email, tags);
+        const playlist = await this.client.createPlaylist(playlistName, user, tags, (error) => {
+            createButton.innerText = origButtonText;
+            errorMessageDisplay.innerText = `Error: ${error.message}`;
+            errorMessageDisplay.classList.remove('hidden');
+        });
         this.dataStore.set('playlist', playlist);
-        document.getElementById('create').innerText = 'Create';
     }
 
     /**
