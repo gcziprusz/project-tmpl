@@ -42,7 +42,6 @@ class CreatePlaylist extends BindingClass {
         createButton.innerText = 'Loading...';
 
         const playlistName = document.getElementById('playlist-name').value;
-        const user = await this.client.getIdentity();
         const tagsText = document.getElementById('tags').value;
 
         let tags;
@@ -52,7 +51,7 @@ class CreatePlaylist extends BindingClass {
             tags = tagsText.split(/\s*,\s*/);
         }
 
-        const playlist = await this.client.createPlaylist(playlistName, user, tags, (error) => {
+        const playlist = await this.client.createPlaylist(playlistName, tags, (error) => {
             createButton.innerText = origButtonText;
             errorMessageDisplay.innerText = `Error: ${error.message}`;
             errorMessageDisplay.classList.remove('hidden');

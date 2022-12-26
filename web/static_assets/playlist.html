@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <script type="text/javascript" src="assets/viewPlaylist.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
+
 <body class="background">
     <header class="header" id="header"></header>
     <div class="card">
@@ -15,6 +17,7 @@
     <div class="card">
         <h2>Add Song to Playlist</h2>
         <form class="card-content" id="add-song-form">
+            <p class="hidden error" id="error-message"> </p>
             <p class="form-field">
                 <label>Album Asin</label>
                 <input type="text" required class="validated-field" id="album-asin" placeholder="B00000000" autofocus>
@@ -27,4 +30,5 @@
         <a href="#" class="button" id="add-song">Add Song</a>
     </div>
 </body>
+
 </html>

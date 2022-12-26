@@ -8,13 +8,21 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 public class UpdatePlaylistLambda
         extends LambdaActivityRunner<UpdatePlaylistRequest, UpdatePlaylistResult>
-        implements RequestHandler<LambdaRequest<UpdatePlaylistRequest>, LambdaResponse> {
+        implements RequestHandler<AuthenticatedLambdaRequest<UpdatePlaylistRequest>, LambdaResponse> {
     @Override
-    public LambdaResponse handleRequest(LambdaRequest<UpdatePlaylistRequest> input, Context context) {
+    public LambdaResponse handleRequest(AuthenticatedLambdaRequest<UpdatePlaylistRequest> input, Context context) {
         return super.runActivity(
-            () -> input.fromBody(UpdatePlaylistRequest.class),
-            (request, serviceComponent) ->
-                    serviceComponent.provideUpdatePlaylistActivity().handleRequest(request)
+                () -> {
+                    UpdatePlaylistRequest unauthenticatedRequest = input.fromBody(UpdatePlaylistRequest.class);
+                    return input.fromUserClaims(claims ->
+                            UpdatePlaylistRequest.builder()
+                                    .withId(unauthenticatedRequest.getId())
+                                    .withName(unauthenticatedRequest.getName())
+                                    .withCustomerId(claims.get("email"))
+                                    .build());
+                },
+                (request, serviceComponent) ->
+                        serviceComponent.provideUpdatePlaylistActivity().handleRequest(request)
         );
     }
 }

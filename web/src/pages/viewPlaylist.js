@@ -91,6 +91,11 @@ class ViewPlaylist extends BindingClass {
      * playlist.
      */
     async addSong() {
+
+        const errorMessageDisplay = document.getElementById('error-message');
+        errorMessageDisplay.innerText = ``;
+        errorMessageDisplay.classList.add('hidden');
+
         const playlist = this.dataStore.get('playlist');
         if (playlist == null) {
             return;
@@ -101,7 +106,11 @@ class ViewPlaylist extends BindingClass {
         const trackNumber = document.getElementById('track-number').value;
         const playlistId = playlist.id;
 
-        const songList = await this.client.addSongToPlaylist(playlistId, asin, trackNumber);
+        const songList = await this.client.addSongToPlaylist(playlistId, asin, trackNumber, (error) => {
+            errorMessageDisplay.innerText = `Error: ${error.message}`;
+            errorMessageDisplay.classList.remove('hidden');           
+        });
+
         this.dataStore.set('songs', songList);
 
         document.getElementById('add-song').innerText = 'Add Song';

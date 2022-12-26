@@ -102,20 +102,17 @@ export default class MusicPlaylistClient extends BindingClass {
     }
 
     /**
-     * Create a new playlist.
+     * Create a new playlist owned by the current user.
      * @param name The name of the playlist to create.
-     * @param customerId The user who is the owner of the playlist.
      * @param tags Metadata tags to associate with a playlist.
      * @param errorCallback (Optional) A function to execute if the call fails.
      * @returns The playlist that has been created.
      */
-    async createPlaylist(name, customer, tags, errorCallback) {
+    async createPlaylist(name, tags, errorCallback) {
         try {
             const token = await this.getTokenOrThrow("Only authenticated users can create playlists.");
             const response = await this.axiosClient.post(`playlists`, {
                 name: name,
-                customerId: customer.email,
-                customerName: customer.name,
                 tags: tags
             }, {
                 headers: {
@@ -179,9 +176,13 @@ export default class MusicPlaylistClient extends BindingClass {
      */
     handleError(error, errorCallback) {
         console.error(error);
-        if (error?.response?.data?.message) {
-            console.error(error?.response?.data?.message)
+
+        const errorFromApi = error?.response?.data?.error_message;
+        if (errorFromApi) {
+            console.error(errorFromApi)
+            error.message = errorFromApi;
         }
+
         if (errorCallback) {
             errorCallback(error);
         }

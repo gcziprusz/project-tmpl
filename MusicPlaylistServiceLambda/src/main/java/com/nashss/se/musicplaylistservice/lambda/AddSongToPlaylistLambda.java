@@ -8,11 +8,21 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 public class AddSongToPlaylistLambda
         extends LambdaActivityRunner<AddSongToPlaylistRequest, AddSongToPlaylistResult>
-        implements RequestHandler<LambdaRequest<AddSongToPlaylistRequest>, LambdaResponse> {
+        implements RequestHandler<AuthenticatedLambdaRequest<AddSongToPlaylistRequest>, LambdaResponse> {
     @Override
-    public LambdaResponse handleRequest(LambdaRequest<AddSongToPlaylistRequest> input, Context context) {
+    public LambdaResponse handleRequest(AuthenticatedLambdaRequest<AddSongToPlaylistRequest> input, Context context) {
         return super.runActivity(
-            () -> input.fromBody(AddSongToPlaylistRequest.class),
+            () -> {
+                AddSongToPlaylistRequest unauthenticatedRequest = input.fromBody(AddSongToPlaylistRequest.class);
+                return input.fromUserClaims(claims ->
+                        AddSongToPlaylistRequest.builder()
+                                .withId(unauthenticatedRequest.getId())
+                                .withAsin(unauthenticatedRequest.getAsin())
+                                .withTrackNumber(unauthenticatedRequest.getTrackNumber())
+                                .withQueueNext(unauthenticatedRequest.isQueueNext())
+                                .withCustomerId(claims.get("email"))
+                                .build());
+            },
             (request, serviceComponent) ->
                     serviceComponent.provideAddSongToPlaylistActivity().handleRequest(request)
         );
