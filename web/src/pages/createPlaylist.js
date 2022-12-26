@@ -1,5 +1,6 @@
 import MusicPlaylistClient from '../api/musicPlaylistClient';
 import Header from '../components/header';
+import Authenticator from '../util/Authenticator';
 import BindingClass from '../util/bindingClass';
 import DataStore from '../util/DataStore';
 
@@ -22,7 +23,7 @@ class CreatePlaylist extends BindingClass {
         document.getElementById('create').addEventListener('click', this.submit);
         this.header.addHeaderToPage();
         this.header.loadData();
-        this.client = new MusicPlaylistClient();
+        this.client = new MusicPlaylistClient(new Authenticator());
     }
 
     /**

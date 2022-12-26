@@ -11,38 +11,41 @@ import BindingClass from "../util/bindingClass";
   */
 export default class MusicPlaylistClient extends BindingClass {
 
-    constructor(props = {}){
+    constructor(authenticator, props = {}){
         super();
+
         const methodsToBind = ['clientLoaded', 'getIdentity', 'getPlaylist', 'getPlaylistSongs', 'createPlaylist'];
         this.bindClassMethods(methodsToBind, this);
+
+        this.authenticator = authenticator;
         this.props = props;
 
         axios.defaults.baseURL = INVOKE_URL;
-        this.client = axios;
-        this.clientLoaded(this.client);
+        this.axiosClient = axios;
+        this.clientLoaded();
     }
 
     /**
      * Run any functions that are supposed to be called once the client has loaded successfully.
-     * @param client The client that has been successfully loaded.
      */
-    clientLoaded(client) {
+    clientLoaded() {
         if (this.props.hasOwnProperty("onReady")){
-            this.props.onReady();
+            this.props.onReady(this);
         }
     }
 
     /**
      * Get the identity of the current user
      * @param errorCallback (Optional) A function to execute if the call fails.
-     * @returns The username and phonetool url for the current user.
+     * @returns The user information for the current user.
      */
     async getIdentity(errorCallback) {
         try {
-            // TODO auth?
-            //const response = await this.client.get(`identity`);
-            const data = {'username': 'Nashville Software'};
-            //return response.data;
+            const userInfo = await this.authenticator.getCurrentUserInfo();
+            const data = {
+                username: userInfo.name,
+                email: userInfo.email,
+            };
             return data;
         } catch(error) {
             this.handleError(error, errorCallback)
@@ -57,7 +60,7 @@ export default class MusicPlaylistClient extends BindingClass {
      */
     async getPlaylist(id, errorCallback) {
         try {
-            const response = await this.client.get(`playlists/${id}`);
+            const response = await this.axiosClient.get(`playlists/${id}`);
             return response.data.playlist;
         } catch (error) {
             this.handleError(error, errorCallback)
@@ -72,7 +75,7 @@ export default class MusicPlaylistClient extends BindingClass {
      */
     async getPlaylistSongs(id, errorCallback) {
         try {
-            const response = await this.client.get(`playlists/${id}/songs`);
+            const response = await this.axiosClient.get(`playlists/${id}/songs`);
             return response.data.songList;
         } catch (error) {
             this.handleError(error, errorCallback)
@@ -89,7 +92,7 @@ export default class MusicPlaylistClient extends BindingClass {
      */
     async createPlaylist(name, customerId, tags, errorCallback) {
         try {
-            const response = await this.client.post(`playlists`, {
+            const response = await this.axiosClient.post(`playlists`, {
                 name: name,
                 customerId: customerId,
                 tags: tags
@@ -109,7 +112,7 @@ export default class MusicPlaylistClient extends BindingClass {
      */
     async addSongToPlaylist(id, asin, trackNumber, errorCallback) {
         try {
-            const response = await this.client.post(`playlists/${id}/songs`, {
+            const response = await this.axiosClient.post(`playlists/${id}/songs`, {
                 id: id, 
                 asin: asin,
                 trackNumber: trackNumber
@@ -130,7 +133,7 @@ export default class MusicPlaylistClient extends BindingClass {
             const queryParams = new URLSearchParams({q : criteria})
             const queryString = queryParams.toString();
 
-            const response = await this.client.get(`playlists/search?${queryString}`);
+            const response = await this.axiosClient.get(`playlists/search?${queryString}`);
 
             return response.data.playlists;
         } catch (error) {
