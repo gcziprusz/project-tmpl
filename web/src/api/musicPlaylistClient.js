@@ -1,5 +1,6 @@
 import axios from "axios";
 import BindingClass from "../util/bindingClass";
+import Authenticator from "./authenticator";
 
 /**
  * Client to call the MusicPlaylistService.
@@ -11,13 +12,13 @@ import BindingClass from "../util/bindingClass";
   */
 export default class MusicPlaylistClient extends BindingClass {
 
-    constructor(authenticator, props = {}){
+    constructor(props = {}) {
         super();
 
         const methodsToBind = ['clientLoaded', 'getIdentity', 'getPlaylist', 'getPlaylistSongs', 'createPlaylist'];
         this.bindClassMethods(methodsToBind, this);
 
-        this.authenticator = authenticator;
+        this.authenticator = new Authenticator();;
         this.props = props;
 
         axios.defaults.baseURL = INVOKE_URL;
@@ -29,7 +30,7 @@ export default class MusicPlaylistClient extends BindingClass {
      * Run any functions that are supposed to be called once the client has loaded successfully.
      */
     clientLoaded() {
-        if (this.props.hasOwnProperty("onReady")){
+        if (this.props.hasOwnProperty("onReady")) {
             this.props.onReady(this);
         }
     }
@@ -41,15 +42,24 @@ export default class MusicPlaylistClient extends BindingClass {
      */
     async getIdentity(errorCallback) {
         try {
+            const isLoggedIn = await this.authenticator.isUserLoggedIn();
+            if (!isLoggedIn) {
+                return undefined;
+            }
+
             const userInfo = await this.authenticator.getCurrentUserInfo();
             const data = {
                 username: userInfo.name,
                 email: userInfo.email,
             };
             return data;
-        } catch(error) {
+        } catch (error) {
             this.handleError(error, errorCallback)
         }
+    }
+
+    async login() {
+        this.authenticator.login();
     }
 
     /**
@@ -113,7 +123,7 @@ export default class MusicPlaylistClient extends BindingClass {
     async addSongToPlaylist(id, asin, trackNumber, errorCallback) {
         try {
             const response = await this.axiosClient.post(`playlists/${id}/songs`, {
-                id: id, 
+                id: id,
                 asin: asin,
                 trackNumber: trackNumber
             });
@@ -130,7 +140,7 @@ export default class MusicPlaylistClient extends BindingClass {
      */
     async search(criteria, errorCallback) {
         try {
-            const queryParams = new URLSearchParams({q : criteria})
+            const queryParams = new URLSearchParams({ q: criteria })
             const queryString = queryParams.toString();
 
             const response = await this.axiosClient.get(`playlists/search?${queryString}`);

@@ -1,4 +1,4 @@
-import BindingClass from "./bindingClass";
+import BindingClass from "../util/bindingClass";
 import { Auth, Hub } from 'aws-amplify';
 
 export default class Authenticator extends BindingClass {
@@ -15,6 +15,19 @@ export default class Authenticator extends BindingClass {
         const congnitoUser = await Auth.currentAuthenticatedUser();
         const { email, name } = congnitoUser.signInUserSession.idToken.payload;
         return { email, name };
+    }
+
+    async isUserLoggedIn() {
+        try {
+            await Auth.currentAuthenticatedUser();
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    async login() {
+        await Auth.federatedSignIn();
     }
 
     configureCognito() {

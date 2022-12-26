@@ -1,6 +1,5 @@
 import MusicPlaylistClient from '../api/musicPlaylistClient';
 import Header from '../components/header';
-import Authenticator from '../util/Authenticator';
 import BindingClass from '../util/bindingClass';
 import DataStore from '../util/DataStore';
 
@@ -21,9 +20,10 @@ class CreatePlaylist extends BindingClass {
      */
     mount() {
         document.getElementById('create').addEventListener('click', this.submit);
+
         this.header.addHeaderToPage();
-        this.header.loadData();
-        this.client = new MusicPlaylistClient(new Authenticator());
+
+        this.client = new MusicPlaylistClient();
     }
 
     /**
@@ -32,9 +32,11 @@ class CreatePlaylist extends BindingClass {
      */
     async submit() {
         document.getElementById('create').innerText = 'Loading...';
+
         const playlistName = document.getElementById('playlist-name').value;
-        const user = this.dataStore.get('username');
+        const user = await this.client.getIdentity();
         const tagsText = document.getElementById('tags').value;
+
         let tags;
         if (tagsText.length < 1) {
             tags = null;
@@ -42,7 +44,7 @@ class CreatePlaylist extends BindingClass {
             tags = tagsText.split(/\s*,\s*/);
         }
 
-        const playlist = await this.client.createPlaylist(playlistName, user, tags);
+        const playlist = await this.client.createPlaylist(playlistName, user.username, tags);
         this.dataStore.set('playlist', playlist);
         document.getElementById('create').innerText = 'Create';
     }

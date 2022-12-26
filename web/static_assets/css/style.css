@@ -124,3 +124,9 @@ th, td {
 th {
     border-bottom: 1px solid var(--primary-color);
 }
+
+a {
+    color: var(--tertiary-color);
+    text-decoration: none;
+}
+

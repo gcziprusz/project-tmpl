@@ -1,65 +1,70 @@
 import MusicPlaylistClient from '../api/musicPlaylistClient';
-import Authenticator from '../util/Authenticator';
 import BindingClass from "../util/bindingClass";
-import DataStore from "../util/DataStore";
 
 /**
  * The header component for the website.
  */
 export default class Header extends BindingClass {
-    constructor(dataStore = new DataStore()) {
+    constructor() {
         super();
-        const methodsToBind = ['clientLoaded', 'loadData', 'addHeaderToPage', 'updateUsernameInHeader', 'getUserInfoForHeader'];
+
+        const methodsToBind = ['addHeaderToPage'];
         this.bindClassMethods(methodsToBind, this);
-        this.dataStore = dataStore;
-        this.dataStore.set('username', 'Loading...');
-        this.dataStore.addChangeListener(this.updateUsernameInHeader);
-    }
 
-    /**
-     * Once the client has loaded successfully, get the identity of the current user.
-     * @param client an instance of MusicPlaylistClient.
-     * @returns {Promise<void>}
-     */
-    async clientLoaded(client) {
-        const identity = await client.getIdentity();
-        this.dataStore.set('username', identity.username);
-    }
-
-    loadData() {
-        this.client = new MusicPlaylistClient(
-            new Authenticator(),
-            { onReady: this.clientLoaded }
-        );
+        this.client = new MusicPlaylistClient();
     }
 
     /**
      * Add the header to the page.
      */
-    addHeaderToPage() {
-        document.getElementById('header').innerHTML = `
-            <div class="site-title">
-                <a class="header_home" href="index.html">Playlists</a>
-            </div>
-            <div id="user">
-                ${this.getUserInfoForHeader()}
-            </div>
-        `;
+    async addHeaderToPage() {
+        const currentUser = await this.client.getIdentity();
+
+        const siteTitle = this.createSiteTitle();
+        const userInfo = this.createUserInfoForHeader(currentUser);
+
+        const header = document.getElementById('header');
+        header.appendChild(siteTitle);
+        header.appendChild(userInfo);
     }
 
-    /**
-     * If the user is logged in, return the user's name.
-     * Otherwise return HTML to display a login button.
-     * @returns content for the user info portion of the header.
-     */
-    getUserInfoForHeader() {
-        return this.dataStore.get('username');
+    createSiteTitle() {
+        const homeLink = document.createElement('a');
+        homeLink.classList.add('header_home');
+        homeLink.href = 'index.html';
+        homeLink.innerText = 'Playlists';
+
+        const siteTitle = document.createElement('div');
+        siteTitle.classList.add('site-title');
+        siteTitle.appendChild(homeLink);
+
+        return siteTitle;
     }
 
-    /**
-     * When the datastore has been updated, update the username in the header.
-     */
-    updateUsernameInHeader() {
-        document.getElementById('user').innerText = this.getUserInfoForHeader();
+    createUserInfoForHeader(currentUser) {
+        const userInfo = document.createElement('div');
+        userInfo.classList.add('user');
+
+        if (currentUser) {
+            userInfo.innerText = currentUser.username;
+        } else {
+            userInfo.appendChild(this.createLoginLink());
+        }
+
+        return userInfo;
     }
+
+    createLoginLink() {
+        const loginLink = document.createElement('a');
+        loginLink.classList.add('button');
+        loginLink.href = '#';
+        loginLink.innerText = 'Login';
+
+        loginLink.addEventListener('click', async () => {
+            await this.client.login();
+        });
+
+        return loginLink;
+    }
+
 }
