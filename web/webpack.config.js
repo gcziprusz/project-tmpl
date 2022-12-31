@@ -7,6 +7,10 @@ const webpack = require('webpack');
 const apiResourceId = process.env.U5_API_RESOURCE_ID;
 const baseUrl = apiResourceId ? `https://${apiResourceId}.execute-api.us-east-2.amazonaws.com/Prod` : "http://localhost:3000";
 
+const cognitoDomain = process.env.COGNITO_DOMAIN;
+const cognitoUserPoolId = process.env.COGNITO_USER_POOL_ID;
+const cognitoUserPoolWebClientId = process.env.COGNITO_USER_POOL_CLIENT_ID;
+
 module.exports = {
   plugins: [
     new CopyPlugin({
@@ -20,7 +24,10 @@ module.exports = {
       ],
     }),
     new webpack.DefinePlugin({
-        INVOKE_URL : JSON.stringify(baseUrl)
+        INVOKE_URL : JSON.stringify(baseUrl),
+        COGNITO_DOMAIN : JSON.stringify(cognitoDomain),
+        COGNITO_USER_POOL_ID : JSON.stringify(cognitoUserPoolId),
+        COGNITO_USER_POOL_CLIENT_ID : JSON.stringify(cognitoUserPoolWebClientId),
     })
   ],
   optimization: {

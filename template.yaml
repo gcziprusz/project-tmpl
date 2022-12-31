@@ -4,9 +4,16 @@ Description: >
   Music Playlist Service
 
 Parameters:
+
+  CognitoDomain:
+    Type: String
+    Description: A name for the cognito Domain
+    Default: "music-playlist-service"
+
   S3Bucket:
     Type: String
     Description: Parameter to specify the S3 Bucket to use for deployment
+
   FrontendDeployment:
     Default: remote
     Type: String
@@ -29,8 +36,74 @@ Globals:
       AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
       AllowHeaders: "'content-type,authorization'"
       AllowOrigin: "'*'"
+    Auth:
+      DefaultAuthorizer: CognitoAuthorizer
+      AddDefaultAuthorizerToCorsPreflight: false
+      Authorizers:
+        CognitoAuthorizer:
+          UserPoolArn: !GetAtt UserPool.Arn
 
 Resources:
+
+  #-----------------------------------------------------
+  # Cognito Configuration for user management
+  #-----------------------------------------------------
+  
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+      UsernameAttributes:
+        - email
+      UsernameConfiguration: 
+        CaseSensitive: false
+      AutoVerifiedAttributes:
+        - email
+      UserPoolName: !Sub ${CognitoDomain}-user-pool
+      Schema:
+        - Name: email
+          AttributeDataType: String
+          Mutable: false
+          Required: true
+        - Name: name
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      AllowedOAuthFlowsUserPoolClient: true
+      CallbackURLs:
+        - http://localhost:8000
+      LogoutURLs:
+        - http://localhost:8000
+      AllowedOAuthFlows:
+        - code
+        - implicit
+      AllowedOAuthScopes:
+        - phone
+        - email
+        - openid
+        - profile
+      SupportedIdentityProviders:
+        - COGNITO
+      PreventUserExistenceErrors: ENABLED
+
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: !Ref CognitoDomain
+      UserPoolId: !Ref UserPool
+
+
+  #-----------------------------------------------------
+  # CloudFront Configuration
+  #-----------------------------------------------------
 
   CloudFrontOriginAccessIdentity:
     Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
@@ -88,7 +161,12 @@ Resources:
             Principal:
               AWS: !Sub "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginAccessIdentity}"
 
-  AccessDynamoDBTablesRole:
+
+  #-----------------------------------------------------
+  # Role/Permissions/Policy Configuration
+  #-----------------------------------------------------
+
+  AccessRole:
     Type: AWS::IAM::Role
     Properties:
       ManagedPolicyArns:
@@ -121,33 +199,39 @@ Resources:
             Statement:
             - Effect: Allow
               Action: dynamodb:*
-              Resource: 
-                Fn::Join:
-                  - ''
-                  - - 'arn:aws:dynamodb:'
-                    - !Ref 'AWS::Region'
-                    - ':'
-                    - !Ref 'AWS::AccountId'
-                    - ':table/playlists'
+              Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/playlists"
+                
+                # Fn::Join:
+                #   - ''
+                #   - - 'arn:aws:dynamodb:'
+                #     - !Ref 'AWS::Region'
+                #     - ':'
+                #     - !Ref 'AWS::AccountId'
+                #     - ':table/playlists'
         - PolicyName: 'AccessAlbumTracksTable'
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
             - Effect: Allow
               Action: dynamodb:*
-              Resource: 
-                Fn::Join:
-                  - ''
-                  - - 'arn:aws:dynamodb:'
-                    - !Ref 'AWS::Region'
-                    - ':'
-                    - !Ref 'AWS::AccountId'
-                    - ':table/album_tracks'
+              Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/album_tracks"
+              # Resource: 
+              #   Fn::Join:
+              #     - ''
+              #     - - 'arn:aws:dynamodb:'
+              #       - !Ref 'AWS::Region'
+              #       - ':'
+              #       - !Ref 'AWS::AccountId'
+              #       - ':table/album_tracks'
+
+  #-----------------------------------------------------
+  # Lambda Functions Configuration
+  #-----------------------------------------------------
 
   GetPlaylistLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Role: !GetAtt AccessDynamoDBTablesRole.Arn
+      Role: !GetAtt AccessRole.Arn
       CodeUri: MusicPlaylistServiceLambda
       Handler: com.nashss.se.musicplaylistservice.lambda.GetPlaylistLambda::handleRequest
       Runtime: java11
@@ -167,7 +251,7 @@ Resources:
   SearchPlaylistsLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Role: !GetAtt AccessDynamoDBTablesRole.Arn
+      Role: !GetAtt AccessRole.Arn
       CodeUri: MusicPlaylistServiceLambda
       Handler: com.nashss.se.musicplaylistservice.lambda.SearchPlaylistsLambda::handleRequest
       Runtime: java11
@@ -187,7 +271,7 @@ Resources:
   GetPlaylistSongsLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Role: !GetAtt AccessDynamoDBTablesRole.Arn
+      Role: !GetAtt AccessRole.Arn
       CodeUri: MusicPlaylistServiceLambda
       Handler: com.nashss.se.musicplaylistservice.lambda.GetPlaylistSongsLambda::handleRequest
       Runtime: java11
@@ -207,7 +291,7 @@ Resources:
   CreatePlaylistLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Role: !GetAtt AccessDynamoDBTablesRole.Arn
+      Role: !GetAtt AccessRole.Arn
       CodeUri: MusicPlaylistServiceLambda
       Handler: com.nashss.se.musicplaylistservice.lambda.CreatePlaylistLambda::handleRequest
       Runtime: java11
@@ -227,7 +311,7 @@ Resources:
   UpdatePlaylistLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Role: !GetAtt AccessDynamoDBTablesRole.Arn
+      Role: !GetAtt AccessRole.Arn
       CodeUri: MusicPlaylistServiceLambda
       Handler: com.nashss.se.musicplaylistservice.lambda.UpdatePlaylistLambda::handleRequest
       Runtime: java11
@@ -247,7 +331,7 @@ Resources:
   AddSongToPlaylistLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Role: !GetAtt AccessDynamoDBTablesRole.Arn
+      Role: !GetAtt AccessRole.Arn
       CodeUri: MusicPlaylistServiceLambda
       Handler: com.nashss.se.musicplaylistservice.lambda.AddSongToPlaylistLambda::handleRequest
       Runtime: java11
@@ -264,7 +348,9 @@ Resources:
             Path: /playlists/{id}/songs
             Method: post
 
-  #-----------------------------------------------------------------
+  #-----------------------------------------------------
+  # DynamoDB Configuration
+  #-----------------------------------------------------
   
   PlaylistsTable:
     Type: AWS::DynamoDB::Table
@@ -293,4 +379,31 @@ Resources:
           KeyType: "RANGE"
       BillingMode: "PAY_PER_REQUEST"
       TableName: "album_tracks"
+
+
+#-----------------------------------------------------
+# The outputs defined below will be preinted 
+#  to the screen after a sucessful deploy
+#-----------------------------------------------------
+
+Outputs:
+
+  CognitoUserPoolID:
+    Value: !Ref UserPool
+    Description: The UserPool ID
+  CognitoAppClientID:
+    Value: !Ref UserPoolClient
+    Description: The app client
+  HostedUIURL:
+    Value: !Sub https://${CognitoDomain}.auth.us-east-2.amazoncognito.com/login?client_id=${UserPoolClient}&response_type=code&scope=email+openid+phone+profile&redirect_uri=http://localhost:8000
+    Description: The hosted UI URL  
+
+  ApiEndpoint:
+    Description: "API Gateway endpoint base URL for Prod stage"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+
+  Cloudfront:
+    Description: "The URL of the deployed front-end application"
+    Value: !Ref 'CloudfrontDistribution'
+    Condition: DeployCloudFront
 
