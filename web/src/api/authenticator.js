@@ -1,11 +1,11 @@
 import BindingClass from "../util/bindingClass";
-import { Auth, Hub } from 'aws-amplify';
+import { Auth } from 'aws-amplify';
 
 export default class Authenticator extends BindingClass {
     constructor() {
         super();
 
-        const methodsToBind = ['getCurrentUserInfo']
+        const methodsToBind = ['getCurrentUserInfo'];
         this.bindClassMethods(methodsToBind, this);
 
         this.configureCognito();
