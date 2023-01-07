@@ -29,12 +29,13 @@ public class AuthenticatedLambdaRequest<T> extends LambdaRequest<T> {
 
     private Map<String, String> getClaims() throws JsonProcessingException {
         // If we are running locally using SAM, we have to manually decode claims from the JWT Token.
-        return System.getenv().get("AWS_SAM_LOCAL") == null
-                ? (Map<String, String>) super.getRequestContext().getAuthorizer().get("claims")
-                : getClaimsFromAuthHeader(super.getHeaders().get("Authorization"));
+        return System.getenv().get("AWS_SAM_LOCAL") == null ?
+                (Map<String, String>) super.getRequestContext().getAuthorizer().get("claims") :
+                getClaimsFromAuthHeader(super.getHeaders().get("Authorization"));
     }
 
-    private Map<String, String> getClaimsFromAuthHeader(final String authorizationHeader) throws JsonProcessingException {
+    private Map<String, String> getClaimsFromAuthHeader(final String authorizationHeader)
+            throws JsonProcessingException {
         String jwt = getJWTFromAuthHeader(authorizationHeader);
         return getClaimsFromJWT(jwt);
     }

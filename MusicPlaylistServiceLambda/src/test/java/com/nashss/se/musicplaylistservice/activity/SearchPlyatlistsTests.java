@@ -1,23 +1,22 @@
 package com.nashss.se.musicplaylistservice.activity;
 
-import com.google.common.collect.Sets;
-import com.nashss.se.musicplaylistservice.activity.requests.GetPlaylistRequest;
 import com.nashss.se.musicplaylistservice.activity.requests.SearchPlaylistsRequest;
-import com.nashss.se.musicplaylistservice.activity.results.GetPlaylistResult;
 import com.nashss.se.musicplaylistservice.activity.results.SearchPlaylistsResult;
 import com.nashss.se.musicplaylistservice.dynamodb.PlaylistDao;
 import com.nashss.se.musicplaylistservice.dynamodb.models.Playlist;
 import com.nashss.se.musicplaylistservice.models.PlaylistModel;
+
+import com.google.common.collect.Sets;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 

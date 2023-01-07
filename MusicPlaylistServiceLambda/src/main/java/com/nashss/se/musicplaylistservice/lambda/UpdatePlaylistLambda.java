@@ -12,17 +12,17 @@ public class UpdatePlaylistLambda
     @Override
     public LambdaResponse handleRequest(AuthenticatedLambdaRequest<UpdatePlaylistRequest> input, Context context) {
         return super.runActivity(
-                () -> {
-                    UpdatePlaylistRequest unauthenticatedRequest = input.fromBody(UpdatePlaylistRequest.class);
-                    return input.fromUserClaims(claims ->
-                            UpdatePlaylistRequest.builder()
-                                    .withId(unauthenticatedRequest.getId())
-                                    .withName(unauthenticatedRequest.getName())
-                                    .withCustomerId(claims.get("email"))
-                                    .build());
-                },
-                (request, serviceComponent) ->
-                        serviceComponent.provideUpdatePlaylistActivity().handleRequest(request)
+            () -> {
+                UpdatePlaylistRequest unauthenticatedRequest = input.fromBody(UpdatePlaylistRequest.class);
+                return input.fromUserClaims(claims ->
+                        UpdatePlaylistRequest.builder()
+                                .withId(unauthenticatedRequest.getId())
+                                .withName(unauthenticatedRequest.getName())
+                                .withCustomerId(claims.get("email"))
+                                .build());
+            },
+            (request, serviceComponent) ->
+                    serviceComponent.provideUpdatePlaylistActivity().handleRequest(request)
         );
     }
 }

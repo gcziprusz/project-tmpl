@@ -13,7 +13,8 @@ public class PlaylistModel {
     private final int songCount;
     private final List<String> tags;
 
-    private PlaylistModel(String id, String name, String customerId, String customerName, int songCount, List<String> tags) {
+    private PlaylistModel(String id, String name, String customerId,
+                          String customerName, int songCount, List<String> tags) {
         this.id = id;
         this.name = name;
         this.customerId = customerId;

@@ -1,6 +1,5 @@
 package com.nashss.se.musicplaylistservice.activity;
 
-import com.amazonaws.util.StringUtils;
 import com.nashss.se.musicplaylistservice.activity.requests.SearchPlaylistsRequest;
 import com.nashss.se.musicplaylistservice.activity.results.SearchPlaylistsResult;
 import com.nashss.se.musicplaylistservice.converters.ModelConverter;
@@ -48,9 +47,7 @@ public class SearchPlaylistsActivity {
         log.info("Received SearchPlaylistsRequest {}", searchPlaylistsRequest);
 
         String criteria = ifNull(searchPlaylistsRequest.getCriteria(), "");
-        String[] criteriaArray = criteria.isBlank()
-                ? new String[0]
-                : criteria.split("\\s");
+        String[] criteriaArray = criteria.isBlank() ? new String[0] : criteria.split("\\s");
 
         List<Playlist> results = playlistDao.searchPlaylists(criteriaArray);
         List<PlaylistModel> playlistModels = new ModelConverter().toPlaylistModelList(results);
