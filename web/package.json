@@ -8,7 +8,8 @@
     "prepublishOnly": "npm run build",
     "build": "webpack --mode=production --devtool=source-map",
     "build-dev": "webpack --mode=development --devtool=source-map",
-    "run-local": "webpack-dev-server --mode=development --hot"
+    "run-local": "API_LOCATION=local webpack-dev-server --mode=development --hot",
+    "run-remote": "API_LOCATION=remote webpack-dev-server --mode=development --hot"
   },
   "dependencies": {
     "aws-amplify": "^5.0.7",
@@ -18,6 +19,7 @@
     "webpack-dev-server": "^4.11.1"
   },
   "devDependencies": {
-    "copy-webpack-plugin": "^11.0.0"
+    "copy-webpack-plugin": "^11.0.0",
+    "dotenv-webpack": "^8.0.1"
   }
 }

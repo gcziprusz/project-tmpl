@@ -79,9 +79,15 @@ Resources:
       UserPoolId: !Ref UserPool
       AllowedOAuthFlowsUserPoolClient: true
       CallbackURLs:
-        - http://localhost:8000
+        - !If
+            - DeployCloudFront
+            - !Sub "https://${CloudfrontDistribution.DomainName}"
+            - http://localhost:8000
       LogoutURLs:
-        - http://localhost:8000
+        - !If
+            - DeployCloudFront
+            - !Sub "https://${CloudfrontDistribution.DomainName}"
+            - http://localhost:8000
       AllowedOAuthFlows:
         - code
         - implicit
@@ -201,13 +207,6 @@ Resources:
               Action: dynamodb:*
               Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/playlists"
                 
-                # Fn::Join:
-                #   - ''
-                #   - - 'arn:aws:dynamodb:'
-                #     - !Ref 'AWS::Region'
-                #     - ':'
-                #     - !Ref 'AWS::AccountId'
-                #     - ':table/playlists'
         - PolicyName: 'AccessAlbumTracksTable'
           PolicyDocument:
             Version: '2012-10-17'
@@ -215,14 +214,6 @@ Resources:
             - Effect: Allow
               Action: dynamodb:*
               Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/album_tracks"
-              # Resource: 
-              #   Fn::Join:
-              #     - ''
-              #     - - 'arn:aws:dynamodb:'
-              #       - !Ref 'AWS::Region'
-              #       - ':'
-              #       - !Ref 'AWS::AccountId'
-              #       - ':table/album_tracks'
 
   #-----------------------------------------------------
   # Lambda Functions Configuration
@@ -247,6 +238,8 @@ Resources:
           Properties:
             Path: /playlists/{id}
             Method: get
+            Auth:
+              Authorizer: 'NONE'
 
   SearchPlaylistsLambda:
     Type: AWS::Serverless::Function
@@ -267,6 +260,8 @@ Resources:
           Properties:
             Path: /playlists/search
             Method: get
+            Auth:
+              Authorizer: 'NONE'
 
   GetPlaylistSongsLambda:
     Type: AWS::Serverless::Function
@@ -287,6 +282,8 @@ Resources:
           Properties:
             Path: /playlists/{id}/songs
             Method: get
+            Auth:
+              Authorizer: 'NONE'
 
   CreatePlaylistLambda:
     Type: AWS::Serverless::Function
@@ -394,8 +391,8 @@ Outputs:
   CognitoAppClientID:
     Value: !Ref UserPoolClient
     Description: The app client
-  HostedUIURL:
-    Value: !Sub https://${CognitoDomain}.auth.us-east-2.amazoncognito.com/login?client_id=${UserPoolClient}&response_type=code&scope=email+openid+phone+profile&redirect_uri=http://localhost:8000
+  CognitoHostedUIURL:
+    Value: !Sub https://${CognitoDomain}.auth.us-east-2.amazoncognito.com
     Description: The hosted UI URL  
 
   ApiEndpoint:
@@ -404,6 +401,6 @@ Outputs:
 
   Cloudfront:
     Description: "The URL of the deployed front-end application"
-    Value: !Ref 'CloudfrontDistribution'
+    Value: !Sub "https://${CloudfrontDistribution.DomainName}"
     Condition: DeployCloudFront
 

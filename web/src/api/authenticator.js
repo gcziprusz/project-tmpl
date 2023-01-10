@@ -41,14 +41,14 @@ export default class Authenticator extends BindingClass {
 
     configureCognito() {
         Auth.configure({
-            userPoolId: 'us-east-2_QTpFlSazv',
-            userPoolWebClientId: '48h596piis0q6kna7q27ut0h3s',
+            userPoolId: process.env.COGNITO_USER_POOL_ID,
+            userPoolWebClientId: process.env.COGNITO_USER_POOL_CLIENT_ID,
             oauth: {
+                domain: process.env.COGNITO_DOMAIN,
+                redirectSignIn: process.env.COGNITO_REDIRECT_SIGNIN,
+                redirectSignOut: process.env.COGNITO_REDIRECT_SIGNOUT,
                 region: 'us-east-1',
-                domain: 'hello-world.auth.us-east-2.amazoncognito.com',
                 scope: ['email', 'openid', 'phone', 'profile'],
-                redirectSignIn: 'http://localhost:8000',
-                redirectSignOut: 'http://localhost:8000',
                 responseType: 'code'
             }
         });

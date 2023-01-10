@@ -21,7 +21,7 @@ export default class MusicPlaylistClient extends BindingClass {
         this.authenticator = new Authenticator();;
         this.props = props;
 
-        axios.defaults.baseURL = INVOKE_URL;
+        axios.defaults.baseURL = process.env.API_BASE_URL;
         this.axiosClient = axios;
         this.clientLoaded();
     }
