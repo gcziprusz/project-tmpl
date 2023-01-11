@@ -1,12 +1,12 @@
 ## Overview
-This document outlines a few differences to keep in mind when using this project for your final course capstone project. You can (and should) ignore this document if you are working on the midstone project.
+This document outlines some differences to keep in mind when using this project for your final course capstone project. **If you are working on the midstone project you should ignore this document.**
 
 ## Deployment Scenarios
 Deployment scenarios 1 and 2 will definitely be used during your Capstone development, Scenario 3 _might_ be used if you choose to use GitHub Actions with your Capstone project. We've outlined a fourth scenario here that you'll most likely want to use for the Capstone.
 
 ### Scenario 4: Remote Backend, Remote Frontend - Local Deploy
 
-**NOTE: You should NOT use this approach for the Unit 5 Midstone Project.** However, you may wish to use this approach while developing your final class capstone.
+**NOTE: You should NOT use this approach for the Unit 5 Midstone Project.**
 
 In this scenario you will deploy both the backend and the frontend to AWS again (like scenario 3), but from your computer (instead of using GitHub Actions). You will use your individual capstone AWS profile for this scenario.
 
