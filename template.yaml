@@ -385,22 +385,27 @@ Resources:
 
 Outputs:
 
-  CognitoUserPoolID:
+  COGNITO_USER_POOL_ID:
     Value: !Ref UserPool
     Description: The UserPool ID
-  CognitoAppClientID:
+  COGNITO_USER_POOL_CLIENT_ID:
     Value: !Ref UserPoolClient
     Description: The app client
-  CognitoHostedUIURL:
+  COGNITO_DOMAIN:
     Value: !Sub https://${CognitoDomain}.auth.us-east-2.amazoncognito.com
     Description: The hosted UI URL  
 
-  ApiEndpoint:
+  API_BASE_URL:
     Description: "API Gateway endpoint base URL for Prod stage"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
 
-  Cloudfront:
+  COGNITO_REDIRECT_SIGNIN:
     Description: "The URL of the deployed front-end application"
     Value: !Sub "https://${CloudfrontDistribution.DomainName}"
     Condition: DeployCloudFront
+  COGNITO_REDIRECT_SIGNOUT:
+    Description: "The URL of the deployed front-end application"
+    Value: !Sub "https://${CloudfrontDistribution.DomainName}"
+    Condition: DeployCloudFront
+
 

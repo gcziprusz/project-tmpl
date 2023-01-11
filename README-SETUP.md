@@ -107,7 +107,7 @@ In this scenario you will deploy the backend to AWS and run the frontend locally
 2. Configure the frontend application:
    - CD into the web directory: `cd web`
    - Copy the `sample.env.remote` file to `.env.remote`: `cp sample.env.remote .env.remote`
-   - Open the `.env.local` file in Visual Studio Code and update the value for these environment variables using the data from the "Ouptuts" of the `sam deploy` in the previous section.
+   - Open the `.env.remote` file in Visual Studio Code and update the value for these environment variables using the data from the "Ouptuts" of the `sam deploy` in the previous section.
       - `API_BASE_URL`
       - `COGNITO_DOMAIN`
       - `COGNITO_USER_POOL_ID`
