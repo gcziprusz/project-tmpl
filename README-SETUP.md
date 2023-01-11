@@ -37,7 +37,7 @@ _Repeat this process choosing your group account and the role `SE_Unit_5_Group_T
 
 ## Development/Deployment Scenarios
 
-We'll do most of our development locally with `sam` like we've been doing so far. Requests that access and/or manipulate data in DynamoDB will continue to reach out to the DynamoDB tables in AWS. There are 3 different scenarios that you will use. You should work through each Scenario in order the first time through to configure all the necessary parts.
+We'll do most of our development locally with `sam` like we've been doing so far. Requests that access and/or manipulate data in DynamoDB will continue to reach out to the DynamoDB tables in AWS. There are 4 different scenarios that you will use. You should work through each Scenario in order the first time through to configure all the necessary parts.
 
 ### Prerequisites
 
@@ -61,16 +61,31 @@ In this scenario you will run both the backend and frontend locally on your lapt
    - Build the Java code: `sam build`
    - Create an S3 bucket: `aws s3 mb s3://nss-s3-c##-u5-project-YOUR.NAME` (Replace `c##` with your cohort number, e.g. `c01` for Cohort 1, and replace `YOUR.NAME` with your first and last name.)
       > **TIP:** You only need to do this once.
-   - Deploy the SAM template: `sam deploy --s3-bucket BUCKET_FROM_ABOVE --parameter-overrides S3Bucket=BUCKET_FROM_ABOVE FrontendDeployment=local`
-      > **NOTE:** _Yes you have to provide the same S3 bucket name twice. Yes this is annoying._
+   - Deploy the SAM template: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ FrontendDeployment=local`
+
+     > **NOTE:** _Yes you have to provide the same S3 bucket name twice. Yes this is annoying._
+
+     **Take note of the "Outputs" produced by the deploy. You will be using these soon.**
+
    - Create some sample data: `aws dynamodb batch-write-item --request-items file://data/data.json`
       > **TIP:** You only need to do this once.
       >
       > _The sample data provided here is specific to the Music Playlist Service, you will either delete or replace this when you start your own project, but it's quite useful for now when you're trying to get everything working._
    - Run the local API: `sam local start-api --warm-containers LAZY`
-2. Run a local web server (aka the frontend):
+
+2. Configure the frontend application:
    - CD into the web directory: `cd web`
-   - Install dependencies : `npm install`
+   - Copy the `sample.env.local` file to `.env.local`: `cp sample.env.local .env.local`
+   - Open the `.env.local` file in Visual Studio Code and update the value for these environment variables using the data from the "Ouptuts" of the `sam deploy` in the previous section.
+      - `COGNITO_DOMAIN`
+      - `COGNITO_USER_POOL_ID`
+      - `COGNITO_USER_POOL_CLIENT_ID`
+
+      > **NOTE:** The other environment variables should already have the correct value to run everything locally.
+
+3. Run a local web server (aka the frontend):
+   - Make sure you are in the `web` directory.
+   - Install dependencies: `npm install`
        > **TIP:** You only need to do this once - _unless_ you add/change Javascript dependencies.
    - Run the local server: `npm run run-local`
 
@@ -78,29 +93,37 @@ After doing all of this, you will have a server running on port `8000` - you can
 
 To stop either the local backend (the `sam local...` command) or local frontend (the `npm run...`) command, simply press `Ctrl-C` in the terminal where the process is running.
 
+> **TIP:** The `COGNITO_*` variables above are examples of [environment variables](https://en.wikipedia.org/wiki/Environment_variable) that the frontend configuration is looking for to how to connect to the [Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html) service.
+
 ### Scenario 2: Remote Backend, Local Frontend
 
 In this scenario you will deploy the backend to AWS and run the frontend locally on your laptop. You should use your **individual** AWS account in this scenario so that all data in DDB is yours and yours alone.
 
 1. Deploy the Lambda service (aka the backend):
    - Build the Java code: `sam build`
-   - Deploy it: `sam deploy --s3-bucket BUCKET_FROM_ABOVE --parameter-overrides S3Bucket=BUCKET_FROM_ABOVE FrontendDeployment=local`
-2. Get the ID of the API Gateway:
-    ```shell
-    aws cloudformation describe-stack-resource --stack-name music-playlist-service --logical-resource-id ServerlessRestApi | \
-    jq '.StackResourceDetail.PhysicalResourceId'
-    ```
-    > **TIP:** This will be a 10 digit alphanumeric string. Alternatively you can login to the AWS web management console and get the ID from there.
+   - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ FrontendDeployment=local`
+
+     **Take note of the "Outputs" produced by the deploy. You will be using these soon.**
+2. Configure the frontend application:
+   - CD into the web directory: `cd web`
+   - Copy the `sample.env.remote` file to `.env.remote`: `cp sample.env.remote .env.remote`
+   - Open the `.env.local` file in Visual Studio Code and update the value for these environment variables using the data from the "Ouptuts" of the `sam deploy` in the previous section.
+      - `API_BASE_URL`
+      - `COGNITO_DOMAIN`
+      - `COGNITO_USER_POOL_ID`
+      - `COGNITO_USER_POOL_CLIENT_ID`
+
 3. Run a local web server (aka the frontend):
    - CD into the web directory: `cd web`
-   - `U5_API_RESOURCE_ID=ID_FROM_ABOVE npm run run-local`
-     > **TIP:** The string `U5_API_RESOURCE_ID` is an [environment variable](https://en.wikipedia.org/wiki/Environment_variable) that the frontend configuration is looking for to know whether it should connect to the localhost or a remote host.
+   - `npm run run-remote`
 
 After doing all of this, you will have a server running on port `8000` - you can access it by going to [http://localhost:8000](http://localhost:8000) in your browser. The difference from Scenario 1 is that now the Lambda functions are running in AWS. If you open the developer tools in your browser you will see requests being made to a URL like `https://GATEWAY_RESOURCE_ID.execute-api.us-east-2.amazonaws.com/Prod`. Once you have made several requests this should be noticeably faster than running the code locally on your laptop.
 
-### Scenario 3: Remote Backend, Remote Frontend
+### Scenario 3: Remote Backend, Remote Frontend - Continuous Delievery
 
-In this scenario all the code will be deployed to AWS. You should use your **group** AWS account in this scenario so that all data and code is shared by your team.
+In this scenario all the code will be deployed to AWS using a [GitHub Action](https://docs.github.com/en/actions). This approach mimics a real world [_continuous delivery pipeline_](https://www.atlassian.com/continuous-delivery/principles/pipeline). A new version of the application will be deployed whenever a pull request is merged into the `main` branch. **This is the approach you will use for the Unit 5 Midstone Project for deploying both the backend and frontend code to AWS.**
+
+You should use your **group** AWS account in this scenario so that all data and code is shared by your team.
 
 > **NOTE: Walk through these steps with your group.** The configuration steps only need to be done by one person on the team, and then your GitHub repo and AWS group account will be configured for the rest of the team.
 
@@ -115,7 +138,7 @@ Before this scenario will work, you need to perform a few steps:
    - Account details: Select your group profile (e.g. `Unit5_Group_TEAMNAME`)
    - Region: `us-east-2` _(this should be the default)_
    - User permissions provider: IAM _(this should be the default)_
-   - "Enter the _____ ARN ... or we will create one for you": _leave all of these questions blank_
+   - "Enter the __ ARN ... or we will create one for you": _leave all of these questions blank_
    - "Does your application contain any IMAGE type Lambda functions?": `N` _(this should be the default)_
    - Confirm the summary, and enter `y` to proceed with creation.
    - When you see the `Pipeline IAM user credential` output, save the values shown for `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`. You will not be shown these again, but will need to use them in the next step.
@@ -126,7 +149,11 @@ Before this scenario will work, you need to perform a few steps:
       <em>Figure 1: Screen recording of `sam pipeline bootstrap`. Several values have been replaced with fake or obfuscated values. Your list of AWS accounts may be different than what's shown here.</em>
    </details>
 
-2. Go to the "Settings" page of your teams GitHub repository and click on "Secrets", then "Actions". Click the "New repository secret" button, and set the Name to `AWS_ACCESS_KEY_ID`, and the Secret to the value shown in the prior step, and then click the "Add secret" button. Repeat this for `AWS_SECRET_ACCESS_KEY` as well. When you have completed this you should see both listed in the "Repository secrets" section of this page. NOTE that you will only see the name, and not the secret. This is expected. You will also see some "Organization secrets" listed at the bottom of the page like `GH_PACKAGE_REG_READ_PASS` and `GH_PACKAGE_REG_READ_USER` - you do not need to do anything with these.
+2. Go to the "Settings" page of your teams GitHub repository and click on "Secrets", then "Actions". Click the "New repository secret" button, and set the Name to `AWS_ACCESS_KEY_ID`, and the Secret to the value shown in the prior step, and then click the "Add secret" button. Repeat this for `AWS_SECRET_ACCESS_KEY`, `COGNITO_USER_POOL_ID` and `COGNITO_USER_POOL_CLIENT_ID` as well.
+
+When you have completed this you should see both listed in the "Repository secrets" section of this page. NOTE that you will only see the name, and not the secret. This is expected. 
+
+> **NOTE:** You will also see some "Organization secrets" listed at the bottom of the page like `GH_PACKAGE_REG_READ_PASS` and `GH_PACKAGE_REG_READ_USER` - you do not need to do anything with these.
 
    <details>
       <summary><b>Click to see a screenshot of this step...</b></summary>
@@ -175,6 +202,48 @@ Once you (or someone on your team) have done all the configuration outlined abov
    <img src="resources/images/github-actions.png">
    <em>Figure 4. GitHub Action workflow showing the `build-and-package-main` and `deploy-to-aws` jobs running after a PR merge.</em>
 </details>
+
+### Scenario 4: Remote Backend, Remote Frontend - Local Deploy
+
+**NOTE: You should NOT use this approach for the Unit 5 Midstone Project.** However, you may wish to use this approach while developing your capstone.
+
+In this scenario you will deploy both the backend and the frontend to AWS from your computer. 
+
+1. Deploy the Lambda service (aka the backend):
+   - Build the Java code: `sam build`
+   - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__`
+
+     **Take note of the "Outputs" produced by the deploy. You will be using these soon.**
+
+2. Configure the frontend application:
+   - CD into the web directory: `cd web`
+   - Copy the `sample.env` file to `.env`: `cp sample.env .env`
+   - Open the `.env` file in Visual Studio Code and update the value for these environment variables using the data from the "Ouptuts" of the `sam deploy` in the previous section.
+      - `API_BASE_URL`
+      - `COGNITO_DOMAIN`
+      - `COGNITO_USER_POOL_ID`
+      - `COGNITO_USER_POOL_CLIENT_ID`
+      - `COGNITO_REDIRECT_SIGNIN`
+      - `COGNITO_REDIRECT_SIGNOUT`
+
+   > **NOTE:** The two _redirect_ URLs should probably be set to the URL of your CloudFront distribution - this infomration should be included in the output of the `sam deploy` command - but you may wish to have different URLs for each. The _signin_ URL is where a user will be redirected after logging in and the _signout_ URL is where a user will be redirected after logging out.
+
+3. Build and deploy your frontend code
+   - CD into the web directory: `cd web`
+   - `npm run build`
+
+     This will perform a _production build_ of your frontend application.
+
+   - Copy the build artifacts to the S3 bucket from which your CloudFront distribution is configured to pull.
+
+     ```shell
+     aws s3 cp \
+       build/static \
+       s3://__BUCKET_FROM_ABOVE__/static/ \
+       --recursive
+     ```
+4. Checkout your application.
+   - Visit the CloudFront link displayed in the output of `sam deploy` to see your application in action.
 
 ## Development Notes
 
