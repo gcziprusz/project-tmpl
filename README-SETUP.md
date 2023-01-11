@@ -37,7 +37,7 @@ _Repeat this process choosing your group account and the role `SE_Unit_5_Group_T
 
 ## Development/Deployment Scenarios
 
-We'll do most of our development locally with `sam` like we've been doing so far. Requests that access and/or manipulate data in DynamoDB will continue to reach out to the DynamoDB tables in AWS. There are 3 different scenarios that you will use (and a fourth that we'll use during our final capstone project). You should work through each Scenario in the order listed your first time through to configure all the necessary parts.
+We'll do most of our development locally with `sam` like we've been doing so far. Requests that access and/or manipulate data in DynamoDB will continue to reach out to the DynamoDB tables in AWS. There are 3 different scenarios that you will use. You should work through each Scenario in the order listed your first time through to configure all the necessary parts.
 
 ### Prerequisites
 
@@ -206,48 +206,6 @@ Once you (or someone on your team) have performed all the configuration steps ou
    <img src="resources/images/github-actions.png">
    <em>Figure 4. GitHub Action workflow showing the `build-and-package-main` and `deploy-to-aws` jobs running after a PR merge.</em>
 </details>
-
-### Scenario 4: Remote Backend, Remote Frontend - Local Deploy
-
-**NOTE: You should NOT use this approach for the Unit 5 Midstone Project.** However, you may wish to use this approach while developing your final class capstone.
-
-In this scenario you will deploy both the backend and the frontend to AWS agaain (like scenario 3), but from your computer (instead of using GitHub Actions). 
-
-1. Deploy the Lambda service (aka the backend):
-   - Build the Java code: `sam build`
-   - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__`
-
-     **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
-
-2. Configure the frontend application:
-   - CD into the web directory: `cd web`
-   - Copy the `sample.env` file to `.env`: `cp sample.env .env`
-   - Open the `.env` file in IntelliJ or Visual Studio Code and update the value for these environment variables using the data from the "Ouptuts" of the `sam deploy` in the previous section.
-      - `API_BASE_URL`
-      - `COGNITO_DOMAIN`
-      - `COGNITO_USER_POOL_ID`
-      - `COGNITO_USER_POOL_CLIENT_ID`
-      - `COGNITO_REDIRECT_SIGNIN`
-      - `COGNITO_REDIRECT_SIGNOUT`
-
-   > **NOTE:** The two _redirect_ URLs should probably be set to the URL of your CloudFront distribution - this information should be included in the output of the `sam deploy` command - but you may wish to have different URLs for each. The _signin_ URL is where a user will be redirected after logging in and the _signout_ URL is where a user will be redirected after logging out.
-
-3. Build and deploy your frontend code
-   - CD into the web directory: `cd web`
-   - `npm run build`
-
-     This will perform a _production build_ of your frontend application.
-
-   - Copy the build artifacts to the S3 bucket from which your CloudFront distribution is configured to pull.
-
-     ```shell
-     aws s3 cp \
-       build \
-       s3://__BUCKET_FROM_ABOVE__/static/ \
-       --recursive
-     ```
-4. Checkout your application.
-   - Visit the CloudFront link displayed in the output of `sam deploy` to see your application in action.
 
 ## Development Notes
 
