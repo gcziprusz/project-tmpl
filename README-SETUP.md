@@ -37,7 +37,7 @@ _Repeat this process choosing your group account and the role `SE_Unit_5_Group_T
 
 ## Development/Deployment Scenarios
 
-We'll do most of our development locally with `sam` like we've been doing so far. Requests that access and/or manipulate data in DynamoDB will continue to reach out to the DynamoDB tables in AWS. There are 4 different scenarios that you will use. You should work through each Scenario in order the first time through to configure all the necessary parts.
+We'll do most of our development locally with `sam` like we've been doing so far. Requests that access and/or manipulate data in DynamoDB will continue to reach out to the DynamoDB tables in AWS. There are 3 different scenarios that you will use (and a fourth that we'll use during our final capstone project). You should work through each Scenario in the order listed your first time through to configure all the necessary parts.
 
 ### Prerequisites
 
@@ -53,6 +53,8 @@ sudo apt-get install -y nodejs
 brew install node
 ```
 
+You also need to modify the default value for `CognitoDomain` in the [template.yaml](./template.yaml). When you first checkout this project it's set to `music-playlist-service`, but this needs to be different for everyone (if you don't change this you will get an error message when you try to deploy it). If you are deploying this for the Unit 5 Midstone project you should change it to something like `NAME_OF_YOUR_PROJECT-NAME_OF_YOUR_TEAM` (e.g. `better-playlist-greenteam`). If you are deploying this for your final class Capstone project you should change it to something like `NAME_OF_YOUR_PROJECT-YOUR_NAME` (e.g. `leaderboard-service-johnwark`).
+
 ### Scenario 1: Local Backend, Local Frontend
 
 In this scenario you will run both the backend and frontend locally on your laptop. You should use your **individual** AWS account in this scenario so that all data in DDB is yours and yours alone. Even though we'll be running the backend locally, we need some DynamoDB tables created in AWS so the setup for this involves some remote AWS configuration.
@@ -63,9 +65,9 @@ In this scenario you will run both the backend and frontend locally on your lapt
       > **TIP:** You only need to do this once.
    - Deploy the SAM template: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ FrontendDeployment=local`
 
-     > **NOTE:** _Yes you have to provide the same S3 bucket name twice. Yes this is annoying._
+     > **NOTE:** _Yes you have to provide the same S3 bucket name twice._
 
-     **Take note of the "Outputs" produced by the deploy. You will be using these soon.**
+     **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
 
    - Create some sample data: `aws dynamodb batch-write-item --request-items file://data/data.json`
       > **TIP:** You only need to do this once.
@@ -76,7 +78,7 @@ In this scenario you will run both the backend and frontend locally on your lapt
 2. Configure the frontend application:
    - CD into the web directory: `cd web`
    - Copy the `sample.env.local` file to `.env.local`: `cp sample.env.local .env.local`
-   - Open the `.env.local` file in Visual Studio Code and update the value for these environment variables using the data from the "Ouptuts" of the `sam deploy` in the previous section.
+   - Open the `.env.local` file in IntelliJ or Visual Studio Code and update the value for these environment variables using the data from the "Ouptuts" of the `sam deploy` in the previous section.
       - `COGNITO_DOMAIN`
       - `COGNITO_USER_POOL_ID`
       - `COGNITO_USER_POOL_CLIENT_ID`
@@ -93,7 +95,7 @@ After doing all of this, you will have a server running on port `8000` - you can
 
 To stop either the local backend (the `sam local...` command) or local frontend (the `npm run...`) command, simply press `Ctrl-C` in the terminal where the process is running.
 
-> **TIP:** The `COGNITO_*` variables above are examples of [environment variables](https://en.wikipedia.org/wiki/Environment_variable) that the frontend configuration is looking for to how to connect to the [Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html) service.
+> **TIP:** The `COGNITO_*` variables above are examples of [environment variables](https://en.wikipedia.org/wiki/Environment_variable) that the frontend configuration is looking for in order to connect to the [Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html) service.
 
 ### Scenario 2: Remote Backend, Local Frontend
 
@@ -103,11 +105,11 @@ In this scenario you will deploy the backend to AWS and run the frontend locally
    - Build the Java code: `sam build`
    - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ FrontendDeployment=local`
 
-     **Take note of the "Outputs" produced by the deploy. You will be using these soon.**
+     **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
 2. Configure the frontend application:
    - CD into the web directory: `cd web`
    - Copy the `sample.env.remote` file to `.env.remote`: `cp sample.env.remote .env.remote`
-   - Open the `.env.remote` file in Visual Studio Code and update the value for these environment variables using the data from the "Ouptuts" of the `sam deploy` in the previous section.
+   - Open the `.env.remote` file in IntelliJ or Visual Studio Code and update the value for these environment variables using the data from the "Ouptuts" of the `sam deploy` in the previous section.
       - `API_BASE_URL`
       - `COGNITO_DOMAIN`
       - `COGNITO_USER_POOL_ID`
@@ -149,9 +151,9 @@ Before this scenario will work, you need to perform a few steps:
       <em>Figure 1: Screen recording of `sam pipeline bootstrap`. Several values have been replaced with fake or obfuscated values. Your list of AWS accounts may be different than what's shown here.</em>
    </details>
 
-2. Go to the "Settings" page of your teams GitHub repository and click on "Secrets", then "Actions". Click the "New repository secret" button, and set the Name to `AWS_ACCESS_KEY_ID`, and the Secret to the value shown in the prior step, and then click the "Add secret" button. Repeat this for `AWS_SECRET_ACCESS_KEY`, `COGNITO_USER_POOL_ID` and `COGNITO_USER_POOL_CLIENT_ID` as well.
+2. Go to the "Settings" page of your teams GitHub repository and click on "Secrets", then "Actions". Click the "New repository secret" button, and set the Name to `AWS_ACCESS_KEY_ID`, and the Secret to the value shown in the prior step, and then click the "Add secret" button. Repeat this for `AWS_SECRET_ACCESS_KEY`, `COGNITO_USER_POOL_ID` and `COGNITO_USER_POOL_CLIENT_ID`.
 
-When you have completed this you should see both listed in the "Repository secrets" section of this page. NOTE that you will only see the name, and not the secret. This is expected. 
+When you have completed this you should see each of them listed in the "Repository secrets" section of this page. NOTE that you will only see the name of the secret, and not the secret itself. This is expected. 
 
 > **NOTE:** You will also see some "Organization secrets" listed at the bottom of the page like `GH_PACKAGE_REG_READ_PASS` and `GH_PACKAGE_REG_READ_USER` - you do not need to do anything with these.
 
@@ -185,9 +187,11 @@ _Whew_ that was a lot of configuring. If you've run into issues with any of this
 
 If everything all worked, take a minute and pat yourself and your teammates on the back. At this point you might be wondering "where in the cloud is my website that's now being deployed??". Good question. You can find the answer by running the command `aws cloudfront list-distributions` and looking for a key named `DomainName` (or logging into the AWS Web Management Console and loading the CloudFront console). That should have a value like `ALPHANUMERIC.cloudfront.net`, you can open that in your browser. If everything has been configured correctly you can open the browser dev tools and see your web app making requests to a URL like `https://GATEWAY_RESOURCE_ID.execute-api.us-east-2.amazonaws.com/Prod/`.
 
+> **TIP:** The CloudFront domain should also have been output at the end of the `sam deploy` command that you ran for this scenario.
+
 #### Development Process Overview
 
-Once you (or someone on your team) have done all the configuration outlined above, things should be much simpler. All the AWS and GitHub configuration shouldn't require (too many) changes, so you can focus on developing your software. You'll follow a process like the following:
+Once you (or someone on your team) have performed all the configuration steps outlined above, things should be much simpler. All the AWS and GitHub configuration shouldn't require (too many) changes from this point, so you can focus on developing your software. You'll follow a process like the following:
 
 1. Create a branch named `feature/NAME-OF-FEATURE` and commit your changes to that branch.
    - As you push changes to this branch, the `build-feature` job in the GitHub Actions will build the code.
@@ -205,20 +209,20 @@ Once you (or someone on your team) have done all the configuration outlined abov
 
 ### Scenario 4: Remote Backend, Remote Frontend - Local Deploy
 
-**NOTE: You should NOT use this approach for the Unit 5 Midstone Project.** However, you may wish to use this approach while developing your capstone.
+**NOTE: You should NOT use this approach for the Unit 5 Midstone Project.** However, you may wish to use this approach while developing your final class capstone.
 
-In this scenario you will deploy both the backend and the frontend to AWS from your computer. 
+In this scenario you will deploy both the backend and the frontend to AWS agaain (like scenario 3), but from your computer (instead of using GitHub Actions). 
 
 1. Deploy the Lambda service (aka the backend):
    - Build the Java code: `sam build`
    - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__`
 
-     **Take note of the "Outputs" produced by the deploy. You will be using these soon.**
+     **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
 
 2. Configure the frontend application:
    - CD into the web directory: `cd web`
    - Copy the `sample.env` file to `.env`: `cp sample.env .env`
-   - Open the `.env` file in Visual Studio Code and update the value for these environment variables using the data from the "Ouptuts" of the `sam deploy` in the previous section.
+   - Open the `.env` file in IntelliJ or Visual Studio Code and update the value for these environment variables using the data from the "Ouptuts" of the `sam deploy` in the previous section.
       - `API_BASE_URL`
       - `COGNITO_DOMAIN`
       - `COGNITO_USER_POOL_ID`
@@ -226,7 +230,7 @@ In this scenario you will deploy both the backend and the frontend to AWS from y
       - `COGNITO_REDIRECT_SIGNIN`
       - `COGNITO_REDIRECT_SIGNOUT`
 
-   > **NOTE:** The two _redirect_ URLs should probably be set to the URL of your CloudFront distribution - this infomration should be included in the output of the `sam deploy` command - but you may wish to have different URLs for each. The _signin_ URL is where a user will be redirected after logging in and the _signout_ URL is where a user will be redirected after logging out.
+   > **NOTE:** The two _redirect_ URLs should probably be set to the URL of your CloudFront distribution - this information should be included in the output of the `sam deploy` command - but you may wish to have different URLs for each. The _signin_ URL is where a user will be redirected after logging in and the _signout_ URL is where a user will be redirected after logging out.
 
 3. Build and deploy your frontend code
    - CD into the web directory: `cd web`
@@ -238,7 +242,7 @@ In this scenario you will deploy both the backend and the frontend to AWS from y
 
      ```shell
      aws s3 cp \
-       build/static \
+       build \
        s3://__BUCKET_FROM_ABOVE__/static/ \
        --recursive
      ```
