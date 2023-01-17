@@ -123,7 +123,7 @@ In this scenario you will deploy the backend to AWS and run the frontend locally
 
 After doing all of this, you will have a server running on port `8000` - you can access it by going to [http://localhost:8000](http://localhost:8000) in your browser. The difference from Scenario 1 is that now the Lambda functions are running in AWS. If you open the developer tools in your browser you will see requests being made to a URL like `https://GATEWAY_RESOURCE_ID.execute-api.us-east-2.amazonaws.com/Prod`. Once you have made several requests this should be noticeably faster than running the code locally on your laptop.
 
-### Scenario 3: Remote Backend, Remote Frontend - Continuous Delievery
+### Scenario 3: Remote Backend, Remote Frontend - Continuous Delivery
 
 In this scenario all the code will be deployed to AWS using a [GitHub Action](https://docs.github.com/en/actions). This approach mimics a real world [_continuous delivery pipeline_](https://www.atlassian.com/continuous-delivery/principles/pipeline). A new version of the application will be deployed whenever a pull request is merged into the `main` branch. **This is the approach you will use for the Unit 5 Midstone Project for deploying both the backend and frontend code to AWS.**
 
@@ -137,7 +137,7 @@ Before this scenario will work, you need to perform a few steps:
 
 > _One more reminder to make sure you're logged in with your **group** AWS account for this!_
 
-1. Create an S3 bucket: `aws s3 mb s3://nss-s3-c##-u5-project-YOUR.TEAM.NAME` (Replace `c##` with your cohort number, e.g. `c01` for Cohort 1, and replace `YOUR.TEAM.NAME` with your first and last name.)
+1. Create an S3 bucket: `aws s3 mb s3://nss-s3-c##-u5-project-YOUR.TEAM.NAME` (Replace `c##` with your cohort number, e.g. `c01` for Cohort 1, and replace `YOUR.TEAM.NAME` with your team's name.)
 
     > **NOTE:** S3 bucket names must be lower case.
 
@@ -147,9 +147,13 @@ Before this scenario will work, you need to perform a few steps:
 
       **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
 
-1. Boostrap the pipeline.
-   - Return to the root of your project. This should be the directory that contains the `template.yaml` file.
-   - Run `sam pipeline bootstrap`: This will create some AWS resources necessary to deploy your code. Use the following answers to the questions asked:
+1. Deploy the Lambda service (aka the backend). _NOTE that the primary purpose of deploying this now (with your group AWS account) is to create several of the resources that we need to plug into the GitHub Actions configuration. This is the only time that you'll deploy manually to your AWS account._:
+    - Build the Java code: `sam build`
+    - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__`
+
+      **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
+
+1. Run `sam pipeline bootstrap`: This will create some AWS resources necessary to deploy your code. Use the following answers to the questions asked:
    - Stage definition: `ServiceStage`
    - Account details: Select your group profile (e.g. `Unit5_Group_TEAMNAME`)
    - Region: `us-east-2` _(this should be the default)_
@@ -165,7 +169,7 @@ Before this scenario will work, you need to perform a few steps:
       <em>Figure 1: Screen recording of `sam pipeline bootstrap`. Several values have been replaced with fake or obfuscated values. Your list of AWS accounts may be different than what's shown here.</em>
    </details>
 
-1. Go to the "Settings" page of your teams GitHub repository and click on "Secrets", then "Actions". Click the "New repository secret" button, and set the Name to `AWS_ACCESS_KEY_ID`, and the Secret to the value shown in the prior step, and then click the "Add secret" button. Repeat this for `AWS_SECRET_ACCESS_KEY`, `COGNITO_USER_POOL_ID` and `COGNITO_USER_POOL_CLIENT_ID`.
+1. Go to the "Settings" page of your teams GitHub repository and click on "Secrets", then "Actions". Click the "New repository secret" button, and set the Name to `AWS_ACCESS_KEY_ID`, and the Secret to the value shown in the prior step, and then click the "Add secret" button. Repeat this for `AWS_SECRET_ACCESS_KEY`, `COGNITO_USER_POOL_ID` and `COGNITO_USER_POOL_CLIENT_ID` (the COGNITO values are output from the `sam deploy` command you ran just above).
 
     When you have completed this you should see each of them listed in the "Repository secrets" section of this page. NOTE that you will only see the name of the secret, and not the secret itself. This is expected. 
 
@@ -191,7 +195,7 @@ Before this scenario will work, you need to perform a few steps:
    <details>
       <summary><b>Click to see a screen recording of this step...</b></summary>
       <img src="resources/images/sampipeline-init.svg">
-      <em>Figure 3: Screen recording of `sam pipeline init`. Several values have been replaced with fake or obfuscated values.</em>
+      <em>Figure 3: Screen recording of `sam pipeline init`. Several values have been replaced with fake or obfuscated values and/or might be different than what you see.</em>
    </details>
 
 1. Create a branch named like `feature/github-pipeline`, commit the pipeline file from the prior step, and push the changes. You should see a build start in the Actions tab of the repository. 
