@@ -141,12 +141,6 @@ Before this scenario will work, you need to perform a few steps:
 
     > **NOTE:** S3 bucket names must be lower case.
 
-1. Deploy the Lambda service (aka the backend):
-    - Build the Java code: `sam build`
-    - Deploy it: `sam deploy --s3-bucket __TEAM_BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__TEAM_BUCKET_FROM_ABOVE__`
-
-      **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
-
 1. Deploy the Lambda service (aka the backend). _NOTE that the primary purpose of deploying this now (with your group AWS account) is to create several of the resources that we need to plug into the GitHub Actions configuration. This is the only time that you'll deploy manually to your AWS account._:
     - Build the Java code: `sam build`
     - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__`
@@ -169,7 +163,7 @@ Before this scenario will work, you need to perform a few steps:
       <em>Figure 1: Screen recording of `sam pipeline bootstrap`. Several values have been replaced with fake or obfuscated values. Your list of AWS accounts may be different than what's shown here.</em>
    </details>
 
-1. Go to the "Settings" page of your teams GitHub repository and click on "Secrets", then "Actions". Click the "New repository secret" button, and set the Name to `AWS_ACCESS_KEY_ID`, and the Secret to the value shown in the prior step, and then click the "Add secret" button. Repeat this for `AWS_SECRET_ACCESS_KEY`, `COGNITO_USER_POOL_ID` and `COGNITO_USER_POOL_CLIENT_ID` (the COGNITO values are output from the `sam deploy` command you ran just above).
+1. Go to the "Settings" page of your teams GitHub repository and click on "Secrets", then "Actions". Click the "New repository secret" button, and set the Name to `AWS_ACCESS_KEY_ID`, and the Secret to the value shown in the prior step, and then click the "Add secret" button. Repeat this for `AWS_SECRET_ACCESS_KEY`, `COGNITO_USER_POOL_ID` and `COGNITO_USER_POOL_CLIENT_ID`.
 
     When you have completed this you should see each of them listed in the "Repository secrets" section of this page. NOTE that you will only see the name of the secret, and not the secret itself. This is expected. 
 
@@ -196,6 +190,7 @@ Before this scenario will work, you need to perform a few steps:
       <summary><b>Click to see a screen recording of this step...</b></summary>
       <img src="resources/images/sampipeline-init.svg">
       <em>Figure 3: Screen recording of `sam pipeline init`. Several values have been replaced with fake or obfuscated values and/or might be different than what you see.</em>
+      <em>Figure 3: Screen recording of `sam pipeline init`. Several values have been replaced with fake or obfuscated values and/or might be different than what you see.</em>
    </details>
 
 1. Create a branch named like `feature/github-pipeline`, commit the pipeline file from the prior step, and push the changes. You should see a build start in the Actions tab of the repository. 
@@ -220,9 +215,9 @@ Once you (or someone on your team) have performed all the configuration steps ou
 
 1. Create a branch named `feature/NAME-OF-FEATURE` and commit your changes to that branch.
    - As you push changes to this branch, the `build-feature` job in the GitHub Actions will build the code.
-2. When the work is done open a PR back to `main`.
+1. When the work is done open a PR back to `main`.
    - The PR will "see" the corresponding build for the `build-feature` job. This build must pass before you can merge the PR.
-3. When the PR is merged, a new build will trigger, which will include the `build-and-package-main` and `deploy-to-aws` jobs. When this job completes your latest code will be deployed.
+1. When the PR is merged, a new build will trigger, which will include the `build-and-package-main` and `deploy-to-aws` jobs. When this job completes your latest code will be deployed.
 
 > **NOTE:** You should also do all of your development on a branch like `feature/NAME-OF-FEATURE` for Scenarios 1 and 2.
 
