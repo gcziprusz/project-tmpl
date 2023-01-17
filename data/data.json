@@ -116,10 +116,11 @@
       "PutRequest": {
         "Item": {
           "id": { "S": "O7SFa" },
-          "name": { "S": "NSS Songs" },
+          "playlistName": { "S": "NSS Songs" },
           "songCount": { "N": "1" },
           "songList": { "S": "[]" },
-          "customerId": { "S": "nunya-business" },
+          "customerId": { "S": "foo@example.com" },
+          "customerName": { "S": "Foo Barrington" },
           "tags": { "SS": [ "banjo", "triangle", "saw" ]
           }
         }

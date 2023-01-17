@@ -72,6 +72,7 @@ public class CreatePlaylistActivity {
         newPlaylist.setId(MusicPlaylistServiceUtils.generatePlaylistId());
         newPlaylist.setName(createPlaylistRequest.getName());
         newPlaylist.setCustomerId(createPlaylistRequest.getCustomerId());
+        newPlaylist.setCustomerName(createPlaylistRequest.getCustomerName());
         newPlaylist.setSongCount(0);
         newPlaylist.setTags(playlistTags);
         newPlaylist.setSongList(new ArrayList<>());

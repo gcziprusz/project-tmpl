@@ -23,13 +23,20 @@
     padding: 4px 20px;
 }
 
-button {
+.button {
   background-color: var(--tertiary-color);
   border: none;
   color: var(--secondary-color);
-  padding: 4px 8px;
+  padding: 6px 8px 4px 8px;
   text-align: center;
   font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
 }
 
 .header_home {
@@ -45,6 +52,12 @@ button {
     background-color: var(--secondary-color);
     margin: 20px;
     padding: 10px 20px;
+}
+
+.error {
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
+    padding: 8px;
 }
 
 .validated-field:invalid {
@@ -101,4 +114,24 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Lists_and_Counters/Using_CS
     content: counter(section) ".";
     position: absolute;
     margin-left: -40px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* table styles */ 
+
+th, td {
+    padding: 15px;
+    text-align: left;
+}
+
+th {
+    border-bottom: 1px solid var(--primary-color);
+}
+
+a {
+    color: var(--tertiary-color);
+    text-decoration: none;
 }

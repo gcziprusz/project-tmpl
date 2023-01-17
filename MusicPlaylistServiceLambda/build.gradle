@@ -58,7 +58,7 @@ test {
     }
 }
 
-/* checkstyles */
+/* checkstyle */
 
 // Applies Checkstyle plugin quality checks on project’s Java source files and generates reports from these checks.
 checkstyle {
@@ -87,10 +87,9 @@ checkstyle {
 }
 
 // If we are running the task 'staticchecks', do not ignore failures, otherwise ignore
-//checkstyleMain.doFirst {
-//    //ignoreFailures = !gradle.taskGraph.allTasks.any({ it.name ==~ /.*staticchecks/ })
-//    ignoreFailures = true
-//}
+checkstyleMain.doFirst {
+    ignoreFailures = !gradle.taskGraph.allTasks.any({ it.name ==~ /.*staticchecks/ })
+}
 
 check.dependsOn jacocoTestCoverageVerification
 jacocoTestCoverageVerification {

@@ -1,11 +1,9 @@
 const path = require('path');
 const CopyPlugin = require("copy-webpack-plugin");
-const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 
-// if we have an API resource id set as an env variable we will use that as the
-// baseUrl, otherwise we will default to localhost
-const apiResourceId = process.env.U5_API_RESOURCE_ID;
-const baseUrl = apiResourceId ? `https://${apiResourceId}.execute-api.us-east-2.amazonaws.com/Prod` : "http://localhost:3000";
+// Get the name of the appropriate environment variable (`.env`) file for this build/run of the app
+const dotenvFile = process.env.API_LOCATION ? `.env.${process.env.API_LOCATION}` : '.env';
 
 module.exports = {
   plugins: [
@@ -19,9 +17,7 @@ module.exports = {
         },
       ],
     }),
-    new webpack.DefinePlugin({
-        INVOKE_URL : JSON.stringify(baseUrl)
-    })
+    new Dotenv({ path: dotenvFile }),
   ],
   optimization: {
     usedExports: true
@@ -29,6 +25,7 @@ module.exports = {
   entry: {
     createPlaylist: path.resolve(__dirname, 'src', 'pages', 'createPlaylist.js'),
     viewPlaylist: path.resolve(__dirname, 'src', 'pages', 'viewPlaylist.js'),
+    searchPlaylists: path.resolve(__dirname, 'src', 'pages', 'searchPlaylists.js'),
   },
   output: {
     path: path.resolve(__dirname, 'build', 'assets'),

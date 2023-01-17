@@ -61,6 +61,11 @@ public class AddSongToPlaylistActivity {
         int trackNumber = addSongToPlaylistRequest.getTrackNumber();
 
         Playlist playlist = playlistDao.getPlaylist(addSongToPlaylistRequest.getId());
+
+        if (!playlist.getCustomerId().equals(addSongToPlaylistRequest.getCustomerId())) {
+            throw new SecurityException("You must own a playlist to add songs to it.");
+        }
+
         AlbumTrack albumTrackToAdd = albumTrackDao.getAlbumTrack(asin, trackNumber);
 
         LinkedList<AlbumTrack> albumTracks = (LinkedList<AlbumTrack>) (playlist.getSongList());

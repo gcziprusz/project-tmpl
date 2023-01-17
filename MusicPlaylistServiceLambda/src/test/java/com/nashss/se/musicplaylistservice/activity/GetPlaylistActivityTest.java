@@ -5,14 +5,12 @@ import com.nashss.se.musicplaylistservice.activity.results.GetPlaylistResult;
 import com.nashss.se.musicplaylistservice.dynamodb.PlaylistDao;
 import com.nashss.se.musicplaylistservice.dynamodb.models.Playlist;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;

@@ -1,51 +1,80 @@
 import MusicPlaylistClient from '../api/musicPlaylistClient';
 import BindingClass from "../util/bindingClass";
-import DataStore from "../util/DataStore";
 
 /**
  * The header component for the website.
  */
 export default class Header extends BindingClass {
-    constructor(dataStore = new DataStore()) {
+    constructor() {
         super();
-        const methodsToBind = ['clientLoaded', 'loadData', 'addHeaderToPage', 'updateUsernameInHeader'];
+
+        const methodsToBind = [
+            'addHeaderToPage', 'createSiteTitle', 'createUserInfoForHeader',
+            'createLoginButton', 'createLoginButton', 'createLogoutButton'
+        ];
         this.bindClassMethods(methodsToBind, this);
-        this.dataStore = dataStore;
-        this.dataStore.set('username', '');
-        this.dataStore.addChangeListener(this.updateUsernameInHeader);
-    }
 
-    /**
-     * Once the client has loaded successfully, get the identity of the current user.
-     * @returns {Promise<void>}
-     */
-    async clientLoaded() {
-        // TODO auth?
-        //const identity = await this.client.getIdentity();
-        //this.dataStore.set('username', identity.username);
-        this.dataStore.set('username', 'Nashville Software School');
-    }
-
-    loadData() {
-        this.client = new MusicPlaylistClient({ onReady: this.clientLoaded });
+        this.client = new MusicPlaylistClient();
     }
 
     /**
      * Add the header to the page.
      */
-    addHeaderToPage() {
-        document.getElementById('header').innerHTML = `
-            <div class="site-title">
-                <a class="header_home" href="index.html">Unit 5 Playlists</a>
-            </div>
-            <div id="user">${this.dataStore.get('username')}</div>
-        `;
+    async addHeaderToPage() {
+        const currentUser = await this.client.getIdentity();
+
+        const siteTitle = this.createSiteTitle();
+        const userInfo = this.createUserInfoForHeader(currentUser);
+
+        const header = document.getElementById('header');
+        header.appendChild(siteTitle);
+        header.appendChild(userInfo);
     }
 
-    /**
-     * When the datastore has been updated, update the username in the header.
-     */
-    updateUsernameInHeader() {
-        document.getElementById('user').innerText = this.dataStore.get('username');
+    createSiteTitle() {
+        const homeButton = document.createElement('a');
+        homeButton.classList.add('header_home');
+        homeButton.href = 'index.html';
+        homeButton.innerText = 'Playlists';
+
+        const siteTitle = document.createElement('div');
+        siteTitle.classList.add('site-title');
+        siteTitle.appendChild(homeButton);
+
+        return siteTitle;
+    }
+
+    createUserInfoForHeader(currentUser) {
+        const userInfo = document.createElement('div');
+        userInfo.classList.add('user');
+
+        const childContent = currentUser
+            ? this.createLogoutButton(currentUser)
+            : this.createLoginButton();
+
+        userInfo.appendChild(childContent);
+
+        return userInfo;
+    }
+
+    createLoginButton() {
+        return this.createButton('Login', this.client.login);
+    }
+
+    createLogoutButton(currentUser) {
+        return this.createButton(`Logout: ${currentUser.name}`, this.client.logout);
+    }
+
+    createButton(text, clickHandler) {
+        const button = document.createElement('a');
+        button.classList.add('button');
+        button.href = '#';
+        button.innerText = text;
+
+        button.addEventListener('click', async () => {
+            await clickHandler();
+        });
+
+        return button;
     }
 }

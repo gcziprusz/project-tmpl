@@ -14,7 +14,7 @@ export default class DataStore extends BindingClass {
     }
 
     /**
-     * Get all of the data.
+     * Get all of the data stored in the data store.
      */
     getState() {
         return this.state;
@@ -33,6 +33,8 @@ export default class DataStore extends BindingClass {
      * Merge the current state of the DataStore with the new state. If there are any overlapping keys, overwrite the
      * values with the new state. Then execute all of the registered listeners, so they can react to any potential data
      * updates.
+     * 
+     * This is a fast way to update all data stored in the datastore.
      */
     setState(newState) {
         // ... is the spread operator. This allows us to pull out all of the keys and values of the existing state and

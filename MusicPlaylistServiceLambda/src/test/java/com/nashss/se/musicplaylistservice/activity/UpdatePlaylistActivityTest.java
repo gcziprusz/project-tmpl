@@ -104,7 +104,7 @@ public class UpdatePlaylistActivityTest {
     }
 
     @Test
-    public void handleRequest_customerIdNotMatch_throwsInvalidAttributeChangeException() {
+    public void handleRequest_customerIdNotMatch_throwsSecurityException() {
         // GIVEN
         String id = "id";
         UpdatePlaylistRequest request = UpdatePlaylistRequest.builder()
@@ -122,7 +122,7 @@ public class UpdatePlaylistActivityTest {
         try {
             updatePlaylistActivity.handleRequest(request);
             fail("Expected InvalidAttributeChangeException to be thrown");
-        } catch (InvalidAttributeChangeException e) {
+        } catch (SecurityException e) {
             verify(metricsPublisher).addCount(MetricsConstants.UPDATEPLAYLIST_INVALIDATTRIBUTEVALUE_COUNT, 0);
             verify(metricsPublisher).addCount(MetricsConstants.UPDATEPLAYLIST_INVALIDATTRIBUTECHANGE_COUNT, 1);
         }

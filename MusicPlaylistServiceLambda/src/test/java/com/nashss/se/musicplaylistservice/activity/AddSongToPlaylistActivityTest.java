@@ -43,6 +43,7 @@ public class AddSongToPlaylistActivityTest {
         // a non-empty playlist
         Playlist originalPlaylist = PlaylistTestHelper.generatePlaylist();
         String playlistId = originalPlaylist.getId();
+        String customerId = originalPlaylist.getCustomerId();
 
         // the new song to add to the playlist
         AlbumTrack albumTrackToAdd = AlbumTrackTestHelper.generateAlbumTrack(2);
@@ -57,6 +58,7 @@ public class AddSongToPlaylistActivityTest {
             .withId(playlistId)
             .withAsin(addedAsin)
             .withTrackNumber(addedTracknumber)
+            .withCustomerId(customerId)
             .build();
 
         // WHEN
@@ -78,6 +80,7 @@ public class AddSongToPlaylistActivityTest {
                                                .withId(playlistId)
                                                .withAsin("asin")
                                                .withTrackNumber(1)
+                                               .withCustomerId("doesn't matter")
                                                .build();
         when(playlistDao.getPlaylist(playlistId)).thenThrow(new PlaylistNotFoundException());
 
@@ -89,13 +92,16 @@ public class AddSongToPlaylistActivityTest {
     public void handleRequest_noMatchingAlbumTrack_throwsAlbumTrackNotFoundException() {
         // GIVEN
         Playlist playlist = PlaylistTestHelper.generatePlaylist();
+
         String playlistId = playlist.getId();
+        String cusomerId = playlist.getCustomerId();
         String asin = "nonexistent asin";
         int trackNumber = -1;
         AddSongToPlaylistRequest request = AddSongToPlaylistRequest.builder()
                                                .withId(playlistId)
                                                .withAsin(asin)
                                                .withTrackNumber(trackNumber)
+                                               .withCustomerId(cusomerId)
                                                .build();
 
         // WHEN
@@ -112,6 +118,7 @@ public class AddSongToPlaylistActivityTest {
         int startingTrackCount = 3;
         Playlist originalPlaylist = PlaylistTestHelper.generatePlaylistWithNAlbumTracks(startingTrackCount);
         String playlistId = originalPlaylist.getId();
+        String customerId = originalPlaylist.getCustomerId();
 
         // the new song to add to the playlist
         AlbumTrack albumTrackToAdd = AlbumTrackTestHelper.generateAlbumTrack(8);
@@ -127,6 +134,7 @@ public class AddSongToPlaylistActivityTest {
                                                .withAsin(addedAsin)
                                                .withTrackNumber(addedTracknumber)
                                                .withQueueNext(false)
+                                               .withCustomerId(customerId)
                                                .build();
 
         // WHEN
@@ -146,6 +154,7 @@ public class AddSongToPlaylistActivityTest {
         int startingPlaylistSize = 2;
         Playlist originalPlaylist = PlaylistTestHelper.generatePlaylistWithNAlbumTracks(startingPlaylistSize);
         String playlistId = originalPlaylist.getId();
+        String customerId = originalPlaylist.getCustomerId();
 
         // the new song to add to the playlist
         AlbumTrack albumTrackToAdd = AlbumTrackTestHelper.generateAlbumTrack(6);
@@ -161,6 +170,7 @@ public class AddSongToPlaylistActivityTest {
                                                .withAsin(addedAsin)
                                                .withTrackNumber(addedTracknumber)
                                                .withQueueNext(true)
+                                               .withCustomerId(customerId)
                                                .build();
 
         // WHEN

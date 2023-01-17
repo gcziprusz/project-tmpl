@@ -20,8 +20,9 @@ class CreatePlaylist extends BindingClass {
      */
     mount() {
         document.getElementById('create').addEventListener('click', this.submit);
+
         this.header.addHeaderToPage();
-        this.header.loadData();
+
         this.client = new MusicPlaylistClient();
     }
 
@@ -29,11 +30,20 @@ class CreatePlaylist extends BindingClass {
      * Method to run when the create playlist submit button is pressed. Call the MusicPlaylistService to create the
      * playlist.
      */
-    async submit() {
-        document.getElementById('create').innerText = 'Loading...';
+    async submit(evt) {
+        evt.preventDefault();
+
+        const errorMessageDisplay = document.getElementById('error-message');
+        errorMessageDisplay.innerText = ``;
+        errorMessageDisplay.classList.add('hidden');
+
+        const createButton = document.getElementById('create');
+        const origButtonText = createButton.innerText;
+        createButton.innerText = 'Loading...';
+
         const playlistName = document.getElementById('playlist-name').value;
-        const user = this.dataStore.get('username');
         const tagsText = document.getElementById('tags').value;
+
         let tags;
         if (tagsText.length < 1) {
             tags = null;
@@ -41,9 +51,12 @@ class CreatePlaylist extends BindingClass {
             tags = tagsText.split(/\s*,\s*/);
         }
 
-        const playlist = await this.client.createPlaylist(playlistName, user, tags);
+        const playlist = await this.client.createPlaylist(playlistName, tags, (error) => {
+            createButton.innerText = origButtonText;
+            errorMessageDisplay.innerText = `Error: ${error.message}`;
+            errorMessageDisplay.classList.remove('hidden');
+        });
         this.dataStore.set('playlist', playlist);
-        document.getElementById('create').innerText = 'Create';
     }
 
     /**
