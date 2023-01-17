@@ -62,7 +62,9 @@ In this scenario you will run both the backend and frontend locally on your lapt
 1. Run the Lambda service (aka the backend):
    - Build the Java code: `sam build`
    - Create an S3 bucket: `aws s3 mb s3://nss-s3-c##-u5-project-YOUR.NAME` (Replace `c##` with your cohort number, e.g. `c01` for Cohort 1, and replace `YOUR.NAME` with your first and last name.)
-      > **TIP:** You only need to do this once.
+      > **NOTES:** 
+      > - S3 bucket names must be lower case.  
+      > - You only need to do this once.
    - Deploy the SAM template: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ FrontendDeployment=local`
 
      > **NOTE:** _Yes you have to provide the same S3 bucket name twice._
@@ -127,15 +129,27 @@ In this scenario all the code will be deployed to AWS using a [GitHub Action](ht
 
 You should use your **group** AWS account in this scenario so that all data and code is shared by your team.
 
-> **NOTE: Walk through these steps with your group.** The configuration steps only need to be done by one person on the team, and then your GitHub repo and AWS group account will be configured for the rest of the team.
+**NOTE: Walk through these steps with your group.** The configuration steps only need to be done by **one person** on the team, and then your GitHub repo and AWS group account will be configured for the rest of the team.
 
 #### One Time Configuration
 
-> _One more reminder to make sure you're logged in with your **group** AWS account for this!_
-
 Before this scenario will work, you need to perform a few steps:
 
-1. Run `sam pipeline bootstrap`: This will create some AWS resources necessary to deploy your code. Use the following answers to the questions asked:
+> _One more reminder to make sure you're logged in with your **group** AWS account for this!_
+
+1. Create an S3 bucket: `aws s3 mb s3://nss-s3-c##-u5-project-YOUR.TEAM.NAME` (Replace `c##` with your cohort number, e.g. `c01` for Cohort 1, and replace `YOUR.TEAM.NAME` with your first and last name.)
+
+    > **NOTE:** S3 bucket names must be lower case.
+
+1. Deploy the Lambda service (aka the backend):
+    - Build the Java code: `sam build`
+    - Deploy it: `sam deploy --s3-bucket __TEAM_BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__TEAM_BUCKET_FROM_ABOVE__`
+
+      **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
+
+1. Boostrap the pipeline.
+   - Return to the root of your project. This should be the directory that contains the `template.yaml` file.
+   - Run `sam pipeline bootstrap`: This will create some AWS resources necessary to deploy your code. Use the following answers to the questions asked:
    - Stage definition: `ServiceStage`
    - Account details: Select your group profile (e.g. `Unit5_Group_TEAMNAME`)
    - Region: `us-east-2` _(this should be the default)_
@@ -151,11 +165,13 @@ Before this scenario will work, you need to perform a few steps:
       <em>Figure 1: Screen recording of `sam pipeline bootstrap`. Several values have been replaced with fake or obfuscated values. Your list of AWS accounts may be different than what's shown here.</em>
    </details>
 
-2. Go to the "Settings" page of your teams GitHub repository and click on "Secrets", then "Actions". Click the "New repository secret" button, and set the Name to `AWS_ACCESS_KEY_ID`, and the Secret to the value shown in the prior step, and then click the "Add secret" button. Repeat this for `AWS_SECRET_ACCESS_KEY`, `COGNITO_USER_POOL_ID` and `COGNITO_USER_POOL_CLIENT_ID`.
+1. Go to the "Settings" page of your teams GitHub repository and click on "Secrets", then "Actions". Click the "New repository secret" button, and set the Name to `AWS_ACCESS_KEY_ID`, and the Secret to the value shown in the prior step, and then click the "Add secret" button. Repeat this for `AWS_SECRET_ACCESS_KEY`, `COGNITO_USER_POOL_ID` and `COGNITO_USER_POOL_CLIENT_ID`.
 
-When you have completed this you should see each of them listed in the "Repository secrets" section of this page. NOTE that you will only see the name of the secret, and not the secret itself. This is expected. 
+    When you have completed this you should see each of them listed in the "Repository secrets" section of this page. NOTE that you will only see the name of the secret, and not the secret itself. This is expected. 
 
-> **NOTE:** You will also see some "Organization secrets" listed at the bottom of the page like `GH_PACKAGE_REG_READ_PASS` and `GH_PACKAGE_REG_READ_USER` - you do not need to do anything with these.
+    > **NOTEs:** 
+    > * Remember to use the `COGNITO_USER_POOL_ID` and `COGNITO_USER_POOL_CLIENT_ID` from the deploy you made with the group account (Step 2 of Scenario 3) 
+    > * You will also see some "Organization secrets" listed at the bottom of the page like `GH_PACKAGE_REG_READ_PASS` and `GH_PACKAGE_REG_READ_USER` - you do not need to do anything with these.
 
    <details>
       <summary><b>Click to see a screenshot of this step...</b></summary>
@@ -163,13 +179,13 @@ When you have completed this you should see each of them listed in the "Reposito
       <em>Figure 2: GitHub repository secrets configuration.</em>
    </details>
 
-4. Run `sam pipeline init`: This will create the workflow file needed to enable GitHub Actions to build and deploy your code. Use the following answers to the questions asked (otherwise accept the default):
+1. Run `sam pipeline init`: This will create the workflow file needed to enable GitHub Actions to build and deploy your code. Use the following answers to the questions asked (otherwise accept the default):
    - Pipeline template: "2 - Custom Pipeline Template Location"
    - Template Git location: `git@github.com:NSS-Software-Engineering/u5-pipeline-template.git`
       > **NOTE:** You can see this repo [here](https://github.com/NSS-Software-Engineering/u5-pipeline-template) if you are interested.
    - Stage configuration name: "1" (ServiceStage - you created that earlier).
    - "What is the sam application stack name": provide a descriptive name with no spaces in it; when starting with the example code you might want to use something like `music-playlist-service`, but when you start building your own service you should rename this to something that makes more sense.
-   - "What is the API Resource ID": Accept the default value ("TODO-REPLACE") the first time you run this, we haven't created our API gateway yet (the one you created earlier was in your _individual_ account but this is for the _group_ account). If you are rerunning this at a later point and know what the Gateway Resource ID is, you can enter it here.
+   - Next answer a series of "What is the ... ?" questions. Copy/paste the appropriate value that was output from the `sam deploy` command that you ran just above.
    - After answering the questions this will create a file `.github/workflows/pipeline.yaml`. If you are rerunning this at a later time, it will ask you if you want to overwrite it, which you will probably want to at that point. And of course you've committed it previously, so it's ok if you overwrite it ... right?!
 
    <details>
@@ -178,9 +194,14 @@ When you have completed this you should see each of them listed in the "Reposito
       <em>Figure 3: Screen recording of `sam pipeline init`. Several values have been replaced with fake or obfuscated values.</em>
    </details>
 
-5. Create a branch named like `feature/github-pipeline`, commit the pipeline file from the prior step, and push the changes. You should see a build start in the Actions tab of the repository. You can also open a PR from that branch back to main. When the build succeeds, you can merge the PR.
-6. _After you've merged the PR to `main`_, you should now have an API Gateway in your group account. You can run the command `aws cloudformation...` from the top of this document that you ran earlier in your individual account to get the API Resource ID for your group account. Update the line in [pipeline.yaml](.github/workflows/pipeline.yaml) that starts with `U5_API_RESOURCE_ID` with the ID. Commit that change on a branch named like `feature/api-resource-id-update` and open a PR back to `main`. Merge the PR after it passes the `build-feature` step. When the resulting `main` build runs, you should have a fully automated build and deployment pipeline.
-7. Create some sample data: `aws dynamodb batch-write-item --request-items file://data/data.json`
+1. Create a branch named like `feature/github-pipeline`, commit the pipeline file from the prior step, and push the changes. You should see a build start in the Actions tab of the repository. 
+
+1. Open a PR from that branch back to main. When the build succeeds, you can merge the PR.
+
+    The act of merging the PR should trigger a deploy to AWS. Check the Actions tab to watch the progress.
+
+1. After the deploy is complete, create some sample data: `aws dynamodb batch-write-item --request-items file://data/data.json`
+
    > **TIP:** You only need to do this once. You did this earlier in the _individual_ AWS account, but if you want to use the app in the _group_ account you need to load the data again here.
 
 _Whew_ that was a lot of configuring. If you've run into issues with any of this please reach out to an instructor.

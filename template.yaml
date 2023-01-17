@@ -379,32 +379,32 @@ Resources:
 
 
 #-----------------------------------------------------
-# The outputs defined below will be preinted 
-#  to the screen after a sucessful deploy
+# The outputs defined below will be printed
+#  to the screen after a successful deploy
 #-----------------------------------------------------
 
 Outputs:
 
-  COGNITO_USER_POOL_ID:
+  CognitoUserPoolId:
     Value: !Ref UserPool
-    Description: The UserPool ID
-  COGNITO_USER_POOL_CLIENT_ID:
+    Description: "The Cognito User Pool ID (COGNITO_USER_POOL_ID)."
+  CognitoUserPoolClientId:
     Value: !Ref UserPoolClient
-    Description: The app client
-  COGNITO_DOMAIN:
-    Value: !Sub https://${CognitoDomain}.auth.us-east-2.amazoncognito.com
-    Description: The hosted UI URL  
+    Description: "The Cognito User Pool Client ID (COGNITO_USER_POOL_CLIENT_ID)."
+  CognitoDomain:
+    Value: !Sub "${CognitoDomain}.auth.us-east-2.amazoncognito.com"
+    Description: "The Cognito Domain (COGNITO_DOMAIN)."
 
-  API_BASE_URL:
-    Description: "API Gateway endpoint base URL for Prod stage"
+  ApiBaseUrl:
+    Description: "API Gateway endpoint base URL for Prod stage (API_BASE_URL)."
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
 
-  COGNITO_REDIRECT_SIGNIN:
-    Description: "The URL of the deployed front-end application"
+  CognitoRedirectSignin:
+    Description: "The URL of the deployed front-end application (COGNITO_REDIRECT_SIGNIN)."
     Value: !Sub "https://${CloudfrontDistribution.DomainName}"
     Condition: DeployCloudFront
-  COGNITO_REDIRECT_SIGNOUT:
-    Description: "The URL of the deployed front-end application"
+  CognitoRedirectSignout:
+    Description: "The URL of the deployed front-end application (COGNITO_REDIRECT_SIGNOUT)."
     Value: !Sub "https://${CloudfrontDistribution.DomainName}"
     Condition: DeployCloudFront
 
