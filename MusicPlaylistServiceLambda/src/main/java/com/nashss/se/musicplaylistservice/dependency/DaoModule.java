@@ -1,6 +1,6 @@
 package com.nashss.se.musicplaylistservice.dependency;
 
-import com.nashss.se.aws.dynamodb.DynamoDbClientProvider;
+import com.nashss.se.musicplaylistservice.dynamodb.DynamoDbClientProvider;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
