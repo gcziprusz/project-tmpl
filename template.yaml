@@ -8,7 +8,7 @@ Parameters:
   CognitoDomain:
     Type: String
     Description: A name for the cognito Domain
-    Default: "music-playlist-service"
+    Default: "change-this-music-playlist-service-change-this"
 
   S3Bucket:
     Type: String
@@ -79,15 +79,17 @@ Resources:
       UserPoolId: !Ref UserPool
       AllowedOAuthFlowsUserPoolClient: true
       CallbackURLs:
+        - http://localhost:8000
         - !If
             - DeployCloudFront
             - !Sub "https://${CloudfrontDistribution.DomainName}"
-            - http://localhost:8000
+            - !Ref "AWS::NoValue"
       LogoutURLs:
+        - http://localhost:8000
         - !If
             - DeployCloudFront
             - !Sub "https://${CloudfrontDistribution.DomainName}"
-            - http://localhost:8000
+            - !Ref "AWS::NoValue"
       AllowedOAuthFlows:
         - code
         - implicit
