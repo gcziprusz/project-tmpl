@@ -117,11 +117,25 @@
         "Item": {
           "id": { "S": "O7SFa" },
           "playlistName": { "S": "NSS Songs" },
-          "songCount": { "N": "1" },
+          "songCount": { "N": "2" },
           "songList": { "S": "[{\"asin\":\"B07NJ3H27X\",\"trackNumber\":1,\"albumName\":\"Cuz I Love You\",\"songTitle\":\"Cuz I Love You\"},{\"asin\":\"B019HKJTCI\",\"trackNumber\":6,\"albumName\":\"Money\",\"songTitle\":\"Dark Side of the Moon\"}]" },
           "customerId": { "S": "foo@example.com" },
           "customerName": { "S": "Foo Barrington" },
           "tags": { "SS": [ "banjo", "triangle", "saw" ]
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": { "S": "O8GDb" },
+          "playlistName": { "S": "SE Songs" },
+          "songCount": { "N": "0" },
+          "songList": { "S": "[]" },
+          "customerId": { "S": "bar@example.com" },
+          "customerName": { "S": "Bar Wellington" },
+          "tags": { "SS": [ "guitar", "saw" ]
           }
         }
       }
