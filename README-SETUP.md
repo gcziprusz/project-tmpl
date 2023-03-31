@@ -65,7 +65,7 @@ In this scenario you will run both the backend and frontend locally on your lapt
       > **NOTES:** 
       > - S3 bucket names must be lower case.  
       > - You only need to do this once.
-   - Deploy the SAM template: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ FrontendDeployment=local`
+   - Deploy the SAM template: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ FrontendDeployment=local CognitoDomain=___NAME_OF_YOUR_PROJECT-NAME_OF_YOUR_TEAM_FROM_ABOVE___`
 
      > **NOTE:** _Yes you have to provide the same S3 bucket name twice._
 
@@ -105,7 +105,7 @@ In this scenario you will deploy the backend to AWS and run the frontend locally
 
 1. Deploy the Lambda service (aka the backend):
    - Build the Java code: `sam build`
-   - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ FrontendDeployment=local`
+   - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ FrontendDeployment=local CognitoDomain=___NAME_OF_YOUR_PROJECT-NAME_OF_YOUR_TEAM_FROM_ABOVE___`
 
      **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
 2. Configure the frontend application:
@@ -143,13 +143,13 @@ Before this scenario will work, you need to perform a few steps:
 
 1. Deploy the Lambda service (aka the backend). _NOTE that the primary purpose of deploying this now (with your group AWS account) is to create several of the resources that we need to plug into the GitHub Actions configuration. This is the only time that you'll deploy manually to your AWS account._:
     - Build the Java code: `sam build`
-    - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__`
+    - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ CognitoDomain=___NAME_OF_YOUR_PROJECT-NAME_OF_YOUR_TEAM_FROM_ABOVE___`
 
       **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
 
 1. Deploy the Lambda service (aka the backend). _NOTE that the primary purpose of deploying this now (with your group AWS account) is to create several of the resources that we need to plug into the GitHub Actions configuration. This is the only time that you'll deploy manually to your AWS account._:
     - Build the Java code: `sam build`
-    - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__`
+    - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ CognitoDomain=___NAME_OF_YOUR_PROJECT-NAME_OF_YOUR_TEAM_FROM_ABOVE___`
 
       **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
 
