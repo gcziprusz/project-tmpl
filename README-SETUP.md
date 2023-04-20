@@ -60,13 +60,20 @@ In this scenario you will run both the backend and frontend locally on your lapt
 1. Run the Lambda service (aka the backend):
    - Build the Java code: `sam build`
    - Choose a Cognito Domain matching the pattern `project-{NAME OF PROJECT}-{FULL NAME}`  example Cognito Domain: `project-star-gazer-john-doe`
+      > **NOTE** If the cognito domain name contains anything other than lowercase letters, numbers, and hyphens, then the domain name isn't accepted. You can't use a hyphen for the first or last character. The maximum length of the whole domain name, including the dots, is 63 characters.
    - Create an S3 bucket: `aws s3 mb s3://nss-s3-c##-u5-project-YOUR.NAME` (Replace `c##` with your cohort number, e.g. `c01` for Cohort 1, and replace `YOUR.NAME` with your first and last name.)
       > **NOTES:** 
       > - S3 bucket names must be lower case.  
       > - You only need to do this once.
-   - Deploy the SAM template: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ FrontendDeployment=local CognitoDomain=__COGNITO_DOMAIN_FROM_ABOVE__` 
+   - Deploy the SAM template: 
+     ```
+     sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ \ 
+     --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ \ 
+     CognitoDomain=__COGNITO_DOMAIN_FROM_ABOVE__ \
+     FrontendDeployment=local
+     ```
 
-     > **NOTE:** _Yes you have to provide the same S3 bucket name twice._
+      > **NOTE:** _Yes you have to provide the same S3 bucket name twice._
 
      **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
 
@@ -103,9 +110,18 @@ To stop either the local backend (the `sam local...` command) or local frontend 
 In this scenario you will deploy the backend to AWS and run the frontend locally on your laptop. You should use your **individual** AWS account in this scenario so that all data in DDB is yours and yours alone.
 
 1. Choose a Cognito Domain matching the pattern `project-{NAME OF PROJECT}-{FULL NAME}`  example Cognito Domain: `project-star-gazer-john-doe`
+   > **NOTE** If the cognito domain name contains anything other than lowercase letters, numbers, and hyphens, then the domain name isn't accepted. You can't use a hyphen for the first or last character. The maximum length of the whole domain name, including the dots, is 63 characters.
+
 2. Deploy the Lambda service (aka the backend):
    - Build the Java code: `sam build`
-   - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ FrontendDeployment=local CognitoDomain=__COGNITO_DOMAIN_FROM_ABOVE__`
+   - Deploy it: 
+   ```
+   sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ \
+   --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ \
+   CognitoDomain=__COGNITO_DOMAIN_FROM_ABOVE__ \
+   FrontendDeployment=local
+   ```
+   
 
      **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
 3. Configure the frontend application:
@@ -141,14 +157,21 @@ Before this scenario will work, you need to perform a few steps:
 
     > **NOTE:** S3 bucket names must be lower case.
 
+2. Choose a Team Cognito Domain matching the pattern `project-{NAME OF PROJECT}-{TEAM NAME}`  example Cognito Domain: `project-star-gazer-team-awesome`
+   > **NOTE** If the cognito domain name contains anything other than lowercase letters, numbers, and hyphens, then the domain name isn't accepted. You can't use a hyphen for the first or last character. The maximum length of the whole domain name, including the dots, is 63 characters.
 
-2. Deploy the Lambda service (aka the backend). _NOTE that the primary purpose of deploying this now (with your group AWS account) is to create several of the resources that we need to plug into the GitHub Actions configuration. This is the only time that you'll deploy manually to your AWS account._:
+3. Deploy the Lambda service (aka the backend). _NOTE that the primary purpose of deploying this now (with your group AWS account) is to create several of the resources that we need to plug into the GitHub Actions configuration. This is the only time that you'll deploy manually to your AWS account._:
     - Build the Java code: `sam build`
-    - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__`
+    - Deploy it: 
+     ```
+      sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ \
+      --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ \
+      CognitoDomain=__TEAM_COGNITO_DOMAIN_FROM_ABOVE__
+     ```
 
       **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
 
-3. Run `sam pipeline bootstrap`: This will create some AWS resources necessary to deploy your code. Use the following answers to the questions asked:
+4. Run `sam pipeline bootstrap`: This will create some AWS resources necessary to deploy your code. Use the following answers to the questions asked:
    - Stage definition: `ServiceStage`
    - Account details: Select your group profile (e.g. `Unit5_Group_TEAMNAME`)
    - Region: `us-east-2` _(this should be the default)_
@@ -164,7 +187,7 @@ Before this scenario will work, you need to perform a few steps:
       <em>Figure 1: Screen recording of `sam pipeline bootstrap`. Several values have been replaced with fake or obfuscated values. Your list of AWS accounts may be different than what's shown here.</em>
    </details>
 
-4. Go to the "Settings" page of your teams GitHub repository and click on "Secrets", then "Actions". Click the "New repository secret" button, and set the Name to `AWS_ACCESS_KEY_ID`, and the Secret to the value shown in the prior step, and then click the "Add secret" button. Repeat this for `AWS_SECRET_ACCESS_KEY`, `COGNITO_USER_POOL_ID` and `COGNITO_USER_POOL_CLIENT_ID` (the COGNITO values are output from the `sam deploy` command you ran just above).
+5. Go to the "Settings" page of your teams GitHub repository and click on "Secrets", then "Actions". Click the "New repository secret" button, and set the Name to `AWS_ACCESS_KEY_ID`, and the Secret to the value shown in the prior step, and then click the "Add secret" button. Repeat this for `AWS_SECRET_ACCESS_KEY`, `COGNITO_USER_POOL_ID` and `COGNITO_USER_POOL_CLIENT_ID` (the COGNITO values are output from the `sam deploy` command you ran just above).
 
     When you have completed this you should see each of them listed in the "Repository secrets" section of this page. NOTE that you will only see the name of the secret, and not the secret itself. This is expected. 
 
@@ -178,7 +201,7 @@ Before this scenario will work, you need to perform a few steps:
       <em>Figure 2: GitHub repository secrets configuration.</em>
    </details>
 
-5. Run `sam pipeline init`: This will create the workflow file needed to enable GitHub Actions to build and deploy your code. Use the following answers to the questions asked (otherwise accept the default):
+6. Run `sam pipeline init`: This will create the workflow file needed to enable GitHub Actions to build and deploy your code. Use the following answers to the questions asked (otherwise accept the default):
    - Pipeline template: "2 - Custom Pipeline Template Location"
    - Template Git location: `git@github.com:NSS-Software-Engineering/u5-pipeline-template.git`
       > **NOTE:** You can see this repo [here](https://github.com/NSS-Software-Engineering/u5-pipeline-template) if you are interested.
@@ -193,13 +216,13 @@ Before this scenario will work, you need to perform a few steps:
       <em>Figure 3: Screen recording of `sam pipeline init`. Several values have been replaced with fake or obfuscated values and/or might be different than what you see.</em>
    </details>
 
-6. Create a branch named like `feature/github-pipeline`, commit the pipeline file from the prior step, and push the changes. You should see a build start in the Actions tab of the repository. 
+7. Create a branch named like `feature/github-pipeline`, commit the pipeline file from the prior step, and push the changes. You should see a build start in the Actions tab of the repository. 
 
-7. Open a PR from that branch back to main. When the build succeeds, you can merge the PR.
+8. Open a PR from that branch back to main. When the build succeeds, you can merge the PR.
 
     The act of merging the PR should trigger a deploy to AWS. Check the Actions tab to watch the progress.
 
-8. After the deploy is complete, create some sample data: `aws dynamodb batch-write-item --request-items file://data/data.json`
+9. After the deploy is complete, create some sample data: `aws dynamodb batch-write-item --request-items file://data/data.json`
 
    > **TIP:** You only need to do this once. You did this earlier in the _individual_ AWS account, but if you want to use the app in the _group_ account you need to load the data again here.
 
