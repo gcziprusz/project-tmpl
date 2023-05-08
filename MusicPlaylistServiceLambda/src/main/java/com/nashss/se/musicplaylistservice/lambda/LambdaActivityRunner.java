@@ -22,13 +22,31 @@ public class LambdaActivityRunner<TRequest, TResult> {
     protected LambdaResponse runActivity(
             Supplier<TRequest> requestSupplier,
             BiFunction<TRequest, ServiceComponent, TResult> handleRequest) {
-        log.info("runActivity");
+
+        TRequest request;
         try {
-            TRequest request = requestSupplier.get();
+            log.info("Attempting to build activity request object...");
+
+            request = requestSupplier.get();
+
+            log.info(String.format("Successfully built activity request object of type, %s.",
+                    request.getClass().getName()));
+        } catch (Exception e) {
+            log.error("ERROR! Unable to build activity request object!", e);
+            return LambdaResponse.error(e);
+        }
+
+        try {
+            log.info("Attempting to execute activity...");
+
             ServiceComponent serviceComponent = getService();
             TResult result = handleRequest.apply(request, serviceComponent);
+
+            log.info(String.format("Successfully executed activity. Received result of type, %s.",
+                    result.getClass().getName()));
             return LambdaResponse.success(result);
         } catch (Exception e) {
+            log.error("ERROR! An exception occurred while executing activity!", e);
             return LambdaResponse.error(e);
         }
     }
