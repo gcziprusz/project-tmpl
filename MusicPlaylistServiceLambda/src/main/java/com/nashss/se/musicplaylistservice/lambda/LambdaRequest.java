@@ -29,8 +29,7 @@ public class LambdaRequest<T> extends APIGatewayProxyRequestEvent {
      * @return A new instance of T that contains data from the request body
      */
     public T fromBody(Class<T> requestClass) {
-        log.info(String.format("Attempting to deserialize object from request body (%s).",
-                requestClass.getSimpleName()));
+        log.info("Attempting to deserialize object from request body ({}).", requestClass.getSimpleName());
         try {
             return MAPPER.readValue(super.getBody(), requestClass);
         } catch (JsonProcessingException e) {

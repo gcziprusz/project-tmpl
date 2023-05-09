@@ -29,8 +29,7 @@ public class LambdaActivityRunner<TRequest, TResult> {
 
             request = requestSupplier.get();
 
-            log.info(String.format("Successfully built activity request object of type: %s.",
-                    request.getClass().getSimpleName()));
+            log.info("Successfully built activity request object of type: {}.", request.getClass().getSimpleName());
         } catch (Exception e) {
             log.error("ERROR! Unable to build activity request object!", e);
             return LambdaResponse.error(e);
@@ -42,8 +41,7 @@ public class LambdaActivityRunner<TRequest, TResult> {
             ServiceComponent serviceComponent = getService();
             TResult result = handleRequest.apply(request, serviceComponent);
 
-            log.info(String.format("Successfully executed activity. Received result of type: %s.",
-                    result.getClass().getSimpleName()));
+            log.info("Successfully executed activity. Received result of type: {}.", result.getClass().getSimpleName());
             return LambdaResponse.success(result);
         } catch (Exception e) {
             log.error("ERROR! An exception occurred while executing activity!", e);
