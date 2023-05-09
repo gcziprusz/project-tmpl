@@ -29,12 +29,13 @@ public class LambdaRequest<T> extends APIGatewayProxyRequestEvent {
      * @return A new instance of T that contains data from the request body
      */
     public T fromBody(Class<T> requestClass) {
-        log.info("fromBody");
+        log.info(String.format("Attempting to deserialize object from request body (%s).",
+                requestClass.getSimpleName()));
         try {
             return MAPPER.readValue(super.getBody(), requestClass);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(
-                    String.format("Unable to deserialize %s from request body", requestClass.getSimpleName()),
+                    String.format("Unable to deserialize object from request body (%s).", requestClass.getSimpleName()),
                     e);
         }
     }
@@ -45,6 +46,7 @@ public class LambdaRequest<T> extends APIGatewayProxyRequestEvent {
      * @return A instance of T that contains data from the request's query string
      */
     public T fromQuery(Function<Map<String, String>, T> converter) {
+        log.info("Attempting to retrieve values from query string parameters.");
         Map<String, String> query = ifNull(super.getQueryStringParameters(), Map.of());
         return converter.apply(query);
     }
@@ -55,7 +57,7 @@ public class LambdaRequest<T> extends APIGatewayProxyRequestEvent {
      * @return A instance of T that contains data from the request's path parameters
      */
     public T fromPath(Function<Map<String, String>, T> converter) {
-        log.info("fromPath");
+        log.info("Attempting to retrieve values from path parameters.");
         Map<String, String> path = ifNull(super.getPathParameters(), Map.of());
         return converter.apply(path);
     }
@@ -67,7 +69,7 @@ public class LambdaRequest<T> extends APIGatewayProxyRequestEvent {
      * @return A instance of T that contains data from the request's path parameters
     */
     public T fromPathAndQuery(BiFunction<Map<String, String>, Map<String, String>, T> converter) {
-        log.info("fromPathAndQuery");
+        log.info("Attempting to retrieve values from path and query string parameters.");
         Map<String, String> path = ifNull(super.getPathParameters(), Map.of());
         Map<String, String> query = ifNull(super.getQueryStringParameters(), Map.of());
         return converter.apply(path, query);
