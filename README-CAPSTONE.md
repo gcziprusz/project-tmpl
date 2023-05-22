@@ -12,7 +12,7 @@ In this scenario you will deploy both the backend and the frontend to AWS again 
 
 1. Deploy the Lambda service (aka the backend):
     - Build the Java code: `sam build`
-    - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__`
+    - Deploy it: `sam deploy --s3-bucket __BUCKET_FROM_ABOVE__ --parameter-overrides S3Bucket=__BUCKET_FROM_ABOVE__ CognitoDomain=__COGNITO_DOMAIN_FROM_ABOVE__`
 
       **Take note of the "Outputs" produced by the deploy command. You will be using these soon.**
 
