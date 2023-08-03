@@ -1,3 +1,5 @@
+/* Check out the explanation in ./authenticator.md */
+
 import BindingClass from "../util/bindingClass";
 import { Auth } from 'aws-amplify';
 

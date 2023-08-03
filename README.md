@@ -50,6 +50,8 @@ The [second code base](./web) will contain code for your website:
 
 Often times these are separated into different repositories, but for simplicity’s sake we've kept them in the same repository for this project.
 
+Explore the website code in more detail by visiting the [blueprint](./web/blueprint.md).
+
 _Both of these should be considered starting points/example code. You will end up removing/replacing all of it as you build your own project._
 
 ### Deploying
