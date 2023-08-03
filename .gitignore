@@ -11,6 +11,7 @@
 /configuration/stack-exec
 *.iml
 .aws-sam
+.vscode
 
 # Ignore Gradle project-specific cache directory
 .gradle
