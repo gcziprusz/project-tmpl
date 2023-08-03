@@ -53,7 +53,46 @@ The `CreatePlaylist` class is defined, extending `BindingClass` to utilize its m
 
 - `submit`: This is an [asynchronous](https://www.freecodecamp.org/news/asynchronous-programming-in-javascript#conclusion) method that is called when the "create playlist" submit button is pressed. It handles form data (playlist name and tags), displays loading indicators, and uses the `MusicPlaylistClient` to create the playlist. If there is an error, it displays the error message.
 
-- `redirectToViewPlaylist`: This method is called when the playlist is updated in the data store. It retrieves the playlist's ID and redirects the user to the view playlist page by changing the window's location.
+- `redirectToViewPlaylist`: This method is called when the playlist is updated in the data store. It retrieves the playlist's ID and redirects the user to the view playlist page by changing the window's location. It is also passing data to using `?id=${playlist.id}` 
+
+    Passing data from one site to another using [query parameters](https://www.abstractapi.com/api-glossary/query-parameters#what-are-query-parameters) is a common technique used in web development to transfer information between pages or websites. Query parameters are key-value pairs appended to the end of a URL after a question mark ?. Each parameter is separated by an ampersand &.
+    For example:
+
+    ```
+    https://www.example.com/page?name=John&age=30
+    ```
+
+    In this example, the URL contains two query parameters: `name=John` and `age=30`.
+
+    Here's how data can be passed from one site to another using query parameters:
+
+    ### a. Generating the URL with Query Parameters:
+    The source website (Site A) constructs a URL that includes the data to be passed. This URL can be created dynamically by appending the query parameters to the base URL. For instance, if you have a form where a user enters their name and age, the URL could be generated like this:
+
+    ```javascript
+    const name = document.getElementById('nameInput').value;
+    const age = document.getElementById('ageInput').value;
+    const url = `https://www.example.com/page?name=${encodeURIComponent(name)}&age=${encodeURIComponent(age)}`;
+    ```
+
+    ### b. Redirecting to the Destination Site:
+    To send the user with the data to the destination website (Site B), the source website can trigger a redirect by setting `window.location.href` to the constructed URL. This will take the user to the new site along with the data in the query parameters.
+
+    ```javascript
+    window.location.href = url;
+    ```
+
+    ### c. Retrieving the Data on the Destination Site:
+    On the destination website (Site B), the data from the query parameters can be accessed using JavaScript. The `URLSearchParams` API can help extract the parameters:
+
+    ```javascript
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get('name');
+    const age = urlParams.get('age');
+    ```
+
+    Now, the `name` and `age` variables on Site B will contain the values passed from Site A.
+
 
 ## 3. Main Function:
 ```javascript
