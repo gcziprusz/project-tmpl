@@ -1,7 +1,6 @@
 # webpack.config.js
 
-webpack.config.js is a configuration file for [Webpack](https://www.freecodecamp.org/news/an-intro-to-webpack-what-it-is-and-how-to-use-it-8304ecdc3c60/), a popular module bundler used in modern web development. This Webpack configuration file defines how the project's source code will be transformed, bundled, and output. Let's break down the different parts of this Webpack configuration.
-Webpack has extensive configuration and will only focus on the parts you will likely need to tweak.
+webpack.config.js is a configuration file for [Webpack](https://www.freecodecamp.org/news/an-intro-to-webpack-what-it-is-and-how-to-use-it-8304ecdc3c60/), a popular module bundler used in modern web development. This Webpack configuration file defines how the project's source code will be transformed, bundled, and output. Let's break down the different parts of this Webpack configuration. Webpack has extensive configuration and will only focus on the parts you will likely need to tweak.
 
 1. Webpack Configuration Object:
 ```javascript

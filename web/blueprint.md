@@ -15,13 +15,13 @@ The `index.html` file is the main entry point for our website. It serves as the 
 ## 4. [src/api/authenticator.js](./src/api/authenticator.md) and [src/api/musicPlaylistClient.js](./src/api/musicPlaylistClient.md):
 In the `src/api` folder, we find two important JavaScript files. `authenticator.js` handles authentication-related functionalities, allowing users to log in and log out securely. On the other hand, `musicPlaylistClient.js` acts as a Data Access Object (DAO) for our API, interacting with API endpoints to load, save, and delete data related to music playlists.
 
-## 5. [src/components/header.js](./src/api/header.md):
+## 5. [src/components/header.js](./src/components/header.md):
 The `header.js` file, located in the `src/components` folder, represents the header component of our website. It defines the structure and behavior of the header that appears on all pages. This ensures consistency across the website and provides easy navigation for users.
 
-## 6. [src/pages/createPlaylist.js](./src/api/createPlaylist.md):
+## 6. [src/pages/createPlaylist.js](./src/pages/createPlaylist.md):
 The `createPlaylist.js` file, located in the `src/pages` folder, represents a page-specific module for creating playlists. It defines the behavior and functionalities associated with the "Create Playlist" page. This separation of concerns allows us to manage and maintain each page's code independently.
 
-## 7. [src/util/DataStore.js](./src/api/DataStore.md):
+## 7. [src/util/DataStore.js](./src/util/DataStore.md):
 The `DataStore.js` file in the `src/util` folder plays a crucial role in managing the state of the application. It acts as a central data store, keeping track of various data across the website. When the data changes, it executes registered listeners to update the user interface accordingly. This architecture ensures smooth and consistent data flow across different components.
 
 By following this organized architecture and separating concerns into modules, we can easily maintain, scale, and extend our front-end projects. Each module has a specific responsibility, making the codebase more manageable, understandable, and maintainable. The combination of Webpack for bundling, the `package.json` file for managing dependencies, and modular code organization sets the foundation for a robust and efficient front-end web development workflow.

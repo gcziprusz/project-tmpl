@@ -1,5 +1,5 @@
 # Header
-[header.js](./header.js) defines a JavaScript module for a "Header" component used in a website. The header component is responsible for displaying the website title, user information, and login/logout buttons. The component makes use of the `MusicPlaylistClient` class for handling authentication-related tasks and obtaining user information.
+[header.js](./header.js) defines a JavaScript module for a "Header" [component](https://dev.to/xavortm/what-are-components-in-the-front-end-and-why-do-we-need-them-2o2p) used in a website. The header component is responsible for displaying the website title, user information, and login/logout buttons. The component makes use of the `MusicPlaylistClient` class for handling authentication-related tasks and obtaining user information.
 
 Let's break down the code:
 
@@ -45,7 +45,7 @@ The class `Header` contains several methods for building and adding the header t
 
 - `createLoginButton()`: This method creates the login button element with the text "Login" and sets a click event listener that calls `this.client.login()` when clicked.
 
-- `createLogoutButton(currentUser)`: This method creates the logout button element with the text "Logout: {currentUser.name}". It uses the user's name from the `currentUser` object to display the current user's name on the logout button. It sets a click event listener that calls `this.client.logout()` when clicked.
+- `createLogoutButton(currentUser)`: This method creates the logout button element with the text "Logout: { currentUser.name }". It uses the user's name from the `currentUser` object to display the current user's name on the logout button. It sets a click event listener that calls `this.client.logout()` when clicked.
 
 - `createButton(text, clickHandler)`: This is a helper method used to create a generic button element with the provided text and click event handler. The `clickHandler` argument is a function that will be executed when the button is clicked.
 

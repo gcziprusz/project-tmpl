@@ -28,11 +28,11 @@
   "run-remote": "API_LOCATION=remote webpack-dev-server --mode=development --hot"
 }
 ```
-The "scripts" section defines various commands that can be executed using npm or yarn. For example:
+The "scripts" section defines various commands that can be executed using [npm](https://www.freecodecamp.org/news/what-is-npm-a-node-package-manager-tutorial-for-beginners/) or [yarn](https://engineering.fb.com/2016/10/11/web/yarn-a-new-package-manager-for-javascript/). For example:
 - `"prepublishOnly"`: This script runs the "build" script before publishing the project.
 - `"build"`: This script runs Webpack in production mode, generating a production build of the project with source maps for debugging.
 - `"build-dev"`: This script runs Webpack in development mode, generating a development build with source maps for debugging.
-- `"run-local"` and `"run-remote"`: These scripts start the Webpack Dev Server in development mode with hot module replacement (HMR) enabled. The `API_LOCATION` environment variable is set to either "local" or "remote" based on the script used.
+- `"run-local"` and `"run-remote"`: These scripts start the Webpack Dev Server in development mode with [hot module replacement](https://blog.bitsrc.io/webpacks-hot-module-replacement-feature-explained-43c13b169986) (HMR) enabled. The `API_LOCATION` environment variable is set to either "local" or "remote" based on the script used.
 
 3. Dependencies:
 ```json

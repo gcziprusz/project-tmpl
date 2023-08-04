@@ -1,5 +1,5 @@
 # Authenticator
-[authenticator.js](./authenticator.js) is a [JavaScript module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) that defines a class named `Authenticator`. This class [encapsulates](https://www.techtarget.com/searchnetworking/definition/encapsulation)authentication-related functionalities using [AWS Amplify](https://github.com/aws-amplify/amplify-js#aws-amplify-is-a-javascript-library-for-frontend-and-mobile-developers-building-cloud-enabled-applications), a library that simplifies working with AWS services.
+[authenticator.js](./authenticator.js) is a [JavaScript module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) that defines a class named `Authenticator`. This class [encapsulates](https://www.techtarget.com/searchnetworking/definition/encapsulation) authentication-related functionalities using [AWS Amplify](https://github.com/aws-amplify/amplify-js#aws-amplify-is-a-javascript-library-for-frontend-and-mobile-developers-building-cloud-enabled-applications), a library that simplifies working with AWS services.
 
 Let's break down the code:
 
