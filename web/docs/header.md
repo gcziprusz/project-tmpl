@@ -13,7 +13,7 @@ import BindingClass from "../util/bindingClass";
 ```
 The module imports two dependencies:
 - `MusicPlaylistClient`: This is a class or module that interacts with the MusicPlaylistService API, as we have seen in previous code snippets.
-- `BindingClass`: This class provides utility methods for binding class methods to the class instance. It helps in handling this context issues in JavaScript. (Binding is an advanced Javascript concept, what we've documented here is all that you need to know for this project.)
+- `BindingClass`: This class provides utility methods for binding class methods to the class instance. It helps in handling `this` context issues in JavaScript. (Binding is an advanced Javascript concept, what we've documented here is all that you need to know for this project.)
 
 ## 2. Header Class:
 ```javascript

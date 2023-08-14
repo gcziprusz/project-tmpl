@@ -14,7 +14,7 @@ import Authenticator from "./authenticator";
 ```
 The module imports three dependencies:
 - `axios`: A popular JavaScript library used to make HTTP requests.
-- `BindingClass`: This class provides utility methods for binding class methods to the class instance. It helps in handling this context issues in JavaScript. (Binding is an advanced Javascript concept, what we've documented here is all that you need to know for this project.)
+- `BindingClass`: This class provides utility methods for binding class methods to the class instance. It helps in handling `this` context issues in JavaScript. (Binding is an advanced Javascript concept, what we've documented here is all that you need to know for this project.)
 - `Authenticator`: This is another class that handles authentication-related tasks, such as user login, token retrieval, etc.
 
 ## 2. MusicPlaylistClient Class:
