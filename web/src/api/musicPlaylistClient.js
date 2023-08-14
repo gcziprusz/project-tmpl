@@ -1,5 +1,3 @@
-/* Check out the explanation in ./musicPlaylistClient.md */
-
 import axios from "axios";
 import BindingClass from "../util/bindingClass";
 import Authenticator from "./authenticator";
