@@ -50,7 +50,7 @@ The [second code base](./web) will contain code for your website:
 
 Often times these are separated into different repositories, but for simplicity’s sake we've kept them in the same repository for this project.
 
-Delve into the website code with a comprehensive breakdown by referring to the  [blueprint](./web/blueprint.md). This document provides a detailed exploration of the project's structure, architecture, and key components, helping you better understand the codebase and its organization.
+Delve into the website code with a comprehensive breakdown by referring to the  [blueprint](./web/docs/blueprint.md). This document provides a detailed exploration of the project's structure, architecture, and key components, helping you better understand the codebase and its organization.
 
 _Both of these should be considered starting points/example code. You will end up removing/replacing all of it as you build your own project._
 
