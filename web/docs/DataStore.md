@@ -1,6 +1,8 @@
 # DataStore
 
-The `DataStore` class acts as a central hub to store and manage application data. It provides methods to read, update, and merge the [state](https://www.freecodecamp.org/news/state-in-javascript-explained-by-cooking-a-simple-meal-2baf10a787ee/#:~:text=State%20describes%20the%20status%20of,instantly%20react%20to%20that%20change.), and it automatically notifies all registered listeners whenever there is a change in the stored data. This pattern allows different parts of the application to observe and respond to data changes, leading to better coordination and synchronization among different components. It's a useful utility for building applications with complex data interactions and state management requirements.
+The `DataStore` class acts as a central hub to store and manage application data. It provides methods to read, update, and merge the [state](https://www.freecodecamp.org/news/state-in-javascript-explained-by-cooking-a-simple-meal-2baf10a787ee/#:~:text=State%20describes%20the%20status%20of,instantly%20react%20to%20that%20change.), and it automatically notifies all registered listeners whenever there is a change in the stored data. This pattern allows different parts of the application to observe and respond to data changes, leading to better coordination and synchronization among different components. It's a useful utility for building applications with complex data interactions and state management requirements. 
+
+Due to the nature of this implementation of the Data Store pattern, where data is stored in JavaScript's memory, it lacks the ability to retain or cache data across page reloads.
 
 [DataStore.js](DataStore.js) defines a JavaScript module for a `DataStore` class. This class acts as a centralized data store to manage and store data across the state of an application. It allows other components or modules to access, modify, and react to changes in the stored data by registering change listeners.
 
