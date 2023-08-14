@@ -1,8 +1,7 @@
 # index.html
+This HTML document represents a simple webpage with a search form and buttons for searching playlists and creating new playlists. The actual functionality for searching playlists and displaying the results is handled by the JavaScript file "searchPlaylists.js" linked in the head section. The CSS file "style.css" is used for styling the webpage elements.
 
 [index.html](index.html) is a default filename commonly used for the main entry point or default page of a website or web application. When a web server receives a request to serve a directory (e.g., http://example.com/), it looks for an index.html file in that directory and automatically serves it as the default page.
-
-For example, if you have a website with a file named index.html in the root directory, when users visit http://example.com/, the web server will automatically display the content of index.html.
 
 The index.html file is typically an HTML document that defines the structure and content of the webpage. It may include links to CSS stylesheets, JavaScript files, images, and other assets, as well as the main content that users will see when they visit the website.
 
@@ -79,7 +78,7 @@ This is a search form contained within a card element with class "card". The for
     <a href="createPlaylist.html" class="button">New Playlist</a>
 </p>
 ```
-This section contains two buttons. The first button has an ID "search-btn" and is likely used to trigger the search functionality. The second button links to another page named "createPlaylist.html", where users can create a new playlist.
+This section contains two buttons. The first button has an ID "search-btn" and is used to trigger the search functionality. The second button links to another page named "createPlaylist.html", where users can create a new playlist.
 
 - Search Results Container:
 ```html
@@ -90,5 +89,3 @@ This section contains two buttons. The first button has an ID "search-btn" and i
 </div>
 ```
 This is a container for displaying search results, but it is initially hidden because of the "hidden" class. The container has an ID "search-results-container". Inside the container, there is a heading "Results for" followed by a `<span>` element with ID "search-criteria-display", where the search criteria will be displayed. The search results themselves will be populated inside the `<div>` with ID "search-results-display" when the search is performed.
-
-Overall, the HTML document represents a simple webpage with a search form and buttons for searching playlists and creating new playlists. The actual functionality for searching playlists and displaying the results is likely handled by the JavaScript file "searchPlaylists.js" linked in the head section. The CSS file "style.css" is used for styling the webpage elements.

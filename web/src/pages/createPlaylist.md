@@ -1,4 +1,7 @@
 # Create Playlist
+
+In summary, this JavaScript module sets up the "create playlist" page with event listeners and API interactions. It uses classes and utility modules to handle data management, API calls, and page rendering.
+
 [createPlaylist.js](./createPlaylist.js) is a [JavaScript module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) that handles the logic for the "create playlist" page of a website. It uses various classes and utility modules to interact with the website's API, manage data, and handle user interactions. Let's break down the code step by step:
 
 ## 1. Import Statements:
@@ -55,7 +58,7 @@ The `CreatePlaylist` class is defined, extending `BindingClass` to utilize its m
 
 - `redirectToViewPlaylist`: This method is called when the playlist is updated in the data store. It retrieves the playlist's ID and redirects the user to the view playlist page by changing the window's location. It is also passing data to using `?id=${playlist.id}` 
 
-    Passing data from one site to another using [query parameters](https://www.abstractapi.com/api-glossary/query-parameters#what-are-query-parameters) is a common technique used in web development to transfer information between pages or websites. Query parameters are key-value pairs appended to the end of a URL after a question mark ?. Each parameter is separated by an ampersand &.
+    Passing data from one site to another using [query parameters](https://www.abstractapi.com/api-glossary/query-parameters#what-are-query-parameters) is a common technique used in web development to transfer information between pages or websites. Query parameters are key-value pairs appended to the end of a URL after a question mark `?`. Each parameter is separated by an ampersand `&`.
     For example:
 
     ```
@@ -104,5 +107,3 @@ const main = async () => {
 window.addEventListener('DOMContentLoaded', main);
 ```
 This code defines a main function  (think of this as the javascript equivalent of the [main function in java](https://www.geeksforgeeks.org/java-main-method-public-static-void-main-string-args/)) that creates an instance of the `CreatePlaylist` class and calls its `mount` method when the DOM content has loaded (i.e., the webpage has finished loading).
- 
-In summary, this JavaScript module sets up the "create playlist" page with event listeners and API interactions. It uses classes and utility modules to handle data management, API calls, and page rendering.

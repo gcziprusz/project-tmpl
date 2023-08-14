@@ -1,4 +1,7 @@
 # music playlist client
+
+The `MusicPlaylistClient` class serves as a central client for making API calls to the MusicPlaylistService and abstracts away the details of handling authentication, making HTTP requests, and error handling. It provides a cleaner and more organized way to interact with the backend service in other parts of the application.
+
 [musicPlaylistClient.js](./musicPlaylistClinet.js) defines a class named `MusicPlaylistClient`. This class acts as a client for calling the MusicPlaylistService API and provides methods to interact with the service. It makes use of the [Axios](https://codebots.com/docs/what-is-axios) [library](https://codeinstitute.net/global/blog/what-is-a-javascript-library/) for handling [HTTP requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview) to the [API](https://www.ibm.com/topics/api).
 
 Here's a breakdown of the code:
@@ -11,7 +14,7 @@ import Authenticator from "./authenticator";
 ```
 The module imports three dependencies:
 - `axios`: A popular JavaScript library used to make HTTP requests.
-- `BindingClass`: This class provides utility methods for binding class methods to the class instance. It helps in handling this context issues in JavaScript. (Binding of this is an advanced Javascript concept)
+- `BindingClass`: This class provides utility methods for binding class methods to the class instance. It helps in handling this context issues in JavaScript. (Binding is an advanced Javascript concept, what we've documented here is all that you need to know for this project.)
 - `Authenticator`: This is another class that handles authentication-related tasks, such as user login, token retrieval, etc.
 
 ## 2. MusicPlaylistClient Class:
@@ -65,5 +68,3 @@ The class `MusicPlaylistClient` has several methods that interact with the Music
 - `search(criteria, errorCallback)`: This method performs a search for playlists based on the given `criteria` using an HTTP GET request.
 
 - `handleError(error, errorCallback)`: This is a helper method used to log errors and run any provided error callback functions. It also extracts error messages from the API response if available.
-
-The `MusicPlaylistClient` class serves as a central client for making API calls to the MusicPlaylistService and abstracts away the details of handling authentication, making HTTP requests, and error handling. It provides a cleaner and more organized way to interact with the backend service in other parts of the application.

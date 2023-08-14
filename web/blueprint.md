@@ -9,6 +9,9 @@ The `webpack.config.js` file is an essential part of our build process. It confi
 ## 2. [package.json](package.md):
 The `package.json` file is the project's configuration file for Node.js applications. It lists the project's dependencies, devDependencies, and defines various scripts for tasks like building, running, and testing the project. It also contains metadata about the project, including its name, version, and license.
 
+WHen you initially run `npm install` you may notice a similar file generated called `package-lock.json` right next to `package.json`. 
+`package-lock.json`` is a file that is automatically generated and therefore should not be edited by the developer directly. It's a detailed record of all the specific versions of packages that your project uses.
+
 ## 3. [index.html](./static_assets/index.md):
 The `index.html` file is the main entry point for our website. It serves as the starting HTML page that the browser loads. It references the CSS and JavaScript files required to style the page and add interactive behavior. This file lays the foundation for the website's structure and content.
 
@@ -16,7 +19,7 @@ The `index.html` file is the main entry point for our website. It serves as the 
 In the `src/api` folder, we find two important JavaScript files. `authenticator.js` handles authentication-related functionalities, allowing users to log in and log out securely. On the other hand, `musicPlaylistClient.js` acts as a Data Access Object (DAO) for our API, interacting with API endpoints to load, save, and delete data related to music playlists.
 
 ## 5. [src/components/header.js](./src/components/header.md):
-The `header.js` file, located in the `src/components` folder, represents the header component of our website. It defines the structure and behavior of the header that appears on all pages. This ensures consistency across the website and provides easy navigation for users.
+The `header.js` file, located in the `src/components` folder, represents the header component of our website. It defines the structure and behavior of the header that is embedded on all pages. This ensures consistency across the website and provides easy navigation for users.
 
 ## 6. [src/pages/createPlaylist.js](./src/pages/createPlaylist.md):
 The `createPlaylist.js` file, located in the `src/pages` folder, represents a page-specific module for creating playlists. It defines the behavior and functionalities associated with the "Create Playlist" page. This separation of concerns allows us to manage and maintain each page's code independently.

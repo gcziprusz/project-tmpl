@@ -1,4 +1,7 @@
 # Header
+
+The `Header` class encapsulates the logic for building and displaying the website header, including the site title, user information, and login/logout buttons. It uses the `MusicPlaylistClient` class for authentication-related tasks. The `BindingClass` inheritance ensures that the class methods are properly bound to the class instance, avoiding issues with the `this` context in JavaScript.
+
 [header.js](./header.js) defines a JavaScript module for a "Header" [component](https://dev.to/xavortm/what-are-components-in-the-front-end-and-why-do-we-need-them-2o2p) used in a website. The header component is responsible for displaying the website title, user information, and login/logout buttons. The component makes use of the `MusicPlaylistClient` class for handling authentication-related tasks and obtaining user information.
 
 Let's break down the code:
@@ -9,8 +12,8 @@ import MusicPlaylistClient from '../api/musicPlaylistClient';
 import BindingClass from "../util/bindingClass";
 ```
 The module imports two dependencies:
-- `MusicPlaylistClient`: This is likely a class or module that interacts with the MusicPlaylistService API, as we have seen in previous code snippets.
-- `BindingClass`: This class provides utility methods for binding class methods to the class instance. It helps in handling this context issues in JavaScript. (Binding of this is an advanced Javascript concept)
+- `MusicPlaylistClient`: This is a class or module that interacts with the MusicPlaylistService API, as we have seen in previous code snippets.
+- `BindingClass`: This class provides utility methods for binding class methods to the class instance. It helps in handling this context issues in JavaScript. (Binding is an advanced Javascript concept, what we've documented here is all that you need to know for this project.)
 
 ## 2. Header Class:
 ```javascript
@@ -48,5 +51,3 @@ The class `Header` contains several methods for building and adding the header t
 - `createLogoutButton(currentUser)`: This method creates the logout button element with the text "Logout: { currentUser.name }". It uses the user's name from the `currentUser` object to display the current user's name on the logout button. It sets a click event listener that calls `this.client.logout()` when clicked.
 
 - `createButton(text, clickHandler)`: This is a helper method used to create a generic button element with the provided text and click event handler. The `clickHandler` argument is a function that will be executed when the button is clicked.
-
-Overall, the `Header` class encapsulates the logic for building and displaying the website header, including the site title, user information, and login/logout buttons. It uses the `MusicPlaylistClient` class for authentication-related tasks. The `BindingClass` inheritance ensures that the class methods are properly bound to the class instance, avoiding issues with the `this` context in JavaScript.
