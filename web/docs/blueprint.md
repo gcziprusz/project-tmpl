@@ -10,7 +10,7 @@ The `webpack.config.js` file is an essential part of our build process. It confi
 The `package.json` file is the project's configuration file for Node.js applications. It lists the project's dependencies, devDependencies, and defines various scripts for tasks like building, running, and testing the project. It also contains metadata about the project, including its name, version, and license.
 
 WHen you initially run `npm install` you may notice a similar file generated called `package-lock.json` right next to `package.json`. 
-`package-lock.json`` is a file that is automatically generated and therefore should not be edited by the developer directly. It's a detailed record of all the specific versions of packages that your project uses.
+`package-lock.json` is a file that is automatically generated and therefore should not be edited by the developer directly. It's a detailed record of all the specific versions of packages that your project uses.
 
 ## 3. [index.html](index.md):
 The `index.html` file is the main entry point for our website. It serves as the starting HTML page that the browser loads. It references the CSS and JavaScript files required to style the page and add interactive behavior. This file lays the foundation for the website's structure and content.
