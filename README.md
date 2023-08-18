@@ -50,9 +50,15 @@ The [second code base](./web) will contain code for your website:
 
 Often times these are separated into different repositories, but for simplicity’s sake we've kept them in the same repository for this project.
 
-Delve into the website code with a comprehensive breakdown by referring to the  [blueprint](./web/docs/blueprint.md). This document provides a detailed exploration of the project's structure, architecture, and key components, helping you better understand the codebase and its organization.
+Delve into the website code with a comprehensive breakdown by referring to the [website blueprint](./web/docs/blueprint.md). This document provides a detailed exploration of the project's structure, architecture, and key components, helping you better understand the codebase and its organization.
 
 _Both of these should be considered starting points/example code. You will end up removing/replacing all of it as you build your own project._
+
+### User Authentication With Cognito
+
+We're using [AWS Cognito](https://aws.amazon.com/cognito/) to manage our user authentication. You won't have to do a lot with it, but you should know it's there. As you move through the different [setup](README-SETUP.md) steps you'll choose a name for your "Cognito Domain" based on your project, and the SAM/CloudFormation template should handle the rest.
+
+The first time that you login to your application (or if you ever have to delete and redeploy the whole CloudFormation stack) you'll need to click the "Sign up" link in the login prompt. It's likely that you'll end up needing to create multiple test users along the way, we recommend using a [plus alias](https://gmail.googleblog.com/2008/03/2-hidden-ways-to-get-more-from-your.html). If your email address is `myname@example.com` you can create a Cognito account using the email `myname+test1@example.com`, and then later create another account using the email `myname+test2@example.com`.
 
 ### Deploying
 
@@ -80,6 +86,8 @@ Two important things to call out:
 
 1. To call our backend we are always going through our `MusicPlaylistClient`.
 2. The `DataStore` uses a different pattern than we’ve seen previously. It has two member variables - the state, which is a JavaScript object that should hold all of the data being used across a webpage, and a list of listeners. The listeners are methods in other objects. Anytime `set` or `setState` is called it loops through all of those methods and executes each one. So in each of those listeners the first thing we do is check to see if the data that they rely on is null. Then, if it’s not null, we update the html to reflect the new data. You can take a look at the `addPlaylistToPage()` method in `viewPlaylist.js` for an example of this.
+
+> **TIP:** There's a lot to take in here. The [website blueprint](web/docs/blueprint.md) we linked to earlier is a good resource to refer back to as you work through everything here.
 
 ## Project Setup
 
