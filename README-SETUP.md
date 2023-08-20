@@ -14,7 +14,7 @@ To add the new profile run the command `aws configure sso` and provide the follo
 - SSO session name: `midstone`
 - SSO start URL: `https://nss-se.awsapps.com/start/`
 - SSO Region: `us-east-2`
-- SSO registration scopes: _accept the default_ (press enter)
+- SSO registration scopes: _accept the default_ (press Enter)
 - Choose your team account when prompted to choose an account.
 - CLI default client Region: press Enter to accept the default of `us-east-2`. _If the default is missing or different, enter `us-east-2`._
 - CLI default output format: `json`
@@ -49,7 +49,7 @@ In this scenario you will run both the backend and frontend locally on your lapt
 
 1. Run the Lambda service (aka the backend):
    - Build the Java code: `sam build`
-   - Choose a Cognito Domain matching the pattern `project-{NAME OF PROJECT}-{FULL NAME}`. E.g. `project-star-gazer-john-doe`. You'll use this in the next several commands.
+   - Choose a Cognito domain name matching the pattern `project-{NAME OF PROJECT}-{FULL NAME}`. E.g. `project-star-gazer-john-doe`. You'll use this in the next several commands.
       > **NOTE** If the Cognito domain name contains anything other than lowercase letters, numbers, and hyphens, then the domain name isn't accepted. You can't use a hyphen for the first or last character. The maximum length of the whole domain name, including the dots, is 63 characters.
    - Create an S3 bucket: `aws s3 mb s3://nss-s3-c##-u5-project-YOUR.NAME` (Replace `c##` with your cohort number, e.g. `c01` for Cohort 1, and replace `YOUR.NAME` with your first and last name.)
       > **NOTES:** 
@@ -76,7 +76,7 @@ In this scenario you will run both the backend and frontend locally on your lapt
 2. Configure the frontend application (in a new terminal window or tab):
    - CD into the web directory: `cd web`
    - Copy the `sample.env.local` file to `.env.local`: `cp sample.env.local .env.local`
-   - Open the `.env.local` file in IntelliJ or Visual Studio Code and update the value for these environment variables using the data from the "Ouptuts" of the `sam deploy` in the previous section.
+   - Open the `.env.local` file in IntelliJ or Visual Studio Code and update the value for these environment variables using the data from the "Outputs" of the `sam deploy` in the previous section.
       - `COGNITO_DOMAIN`
       - `COGNITO_USER_POOL_ID`
       - `COGNITO_USER_POOL_CLIENT_ID`
@@ -89,19 +89,17 @@ In this scenario you will run both the backend and frontend locally on your lapt
        > **TIP:** You only need to do this once - _unless_ you add/change Javascript dependencies.
    - Run the local server: `npm run run-local`
 
-After doing all of this, you will have a server running on port `8000` - you can access it by going to [http://localhost:8000](http://localhost:8000) in your browser. Create a playlist, add some songs to it (see [data.json](./data/data.json) for sample ASIN and track numbers you can use).
+After doing all of this, you will have a server running on port `8000` - you can access it by going to [http://localhost:8000](http://localhost:8000) in your browser. Create a playlist, add some songs to it (see [data.json](./data/data.json) for sample ASIN and track numbers you can use). If this is the first time you've tried to log into the application since deploying it, you'll need to create a Cognito user using the "Sign up" link after clicking the "Login" button.
 
 To stop either the local backend (the `sam local...` command) or local frontend (the `npm run...`) command, simply press `Ctrl-C` in the terminal where the process is running.
 
 > **TIP:** The `COGNITO_*` variables above are examples of [environment variables](https://en.wikipedia.org/wiki/Environment_variable) that the frontend configuration is looking for in order to connect to the [Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html) service.
 
-If this is the first time you've tried to log into the application since deploying it, you'll need to create a Cognito user using the "Sign up" link after clicking the "Login" button.
-
 ### Scenario 2: Remote Backend, Local Frontend
 
 In this scenario you will deploy the backend to AWS and run the frontend locally on your laptop. You should use your **individual** AWS account in this scenario so that all data in DDB is yours and yours alone.
 
-1. Choose a Cognito Domain matching the pattern `project-{NAME OF PROJECT}-{FULL NAME}`. E.g. `project-star-gazer-john-doe`. If you've already deployed Scenario 1, you can/should use the same Cognito Domain as that. You'll use this in the next several commands.
+1. Choose a Cognito domain name matching the pattern `project-{NAME OF PROJECT}-{FULL NAME}`. E.g. `project-star-gazer-john-doe`. If you've already deployed Scenario 1, you can/should use the same Cognito Domain as that. You'll use this in the next several commands.
    > **NOTE** If the Cognito domain name contains anything other than lowercase letters, numbers, and hyphens, then the domain name isn't accepted. You can't use a hyphen for the first or last character. The maximum length of the whole domain name, including the dots, is 63 characters.
 
 2. Deploy the Lambda service (aka the backend):
@@ -128,7 +126,7 @@ In this scenario you will deploy the backend to AWS and run the frontend locally
    - CD into the web directory: `cd web`
    - `npm run run-remote`
 
-After doing all of this, you will have a server running on port `8000` - you can access it by going to [http://localhost:8000](http://localhost:8000) in your browser. The difference from Scenario 1 is that now the Lambda functions are running in AWS. If you open the developer tools in your browser you will see requests being made to a URL like `https://GATEWAY_RESOURCE_ID.execute-api.us-east-2.amazonaws.com/Prod`. Once you have made several requests this should be noticeably faster than running the code locally on your laptop.
+After doing all of this, you will have a server running on port `8000` - you can access it by going to [http://localhost:8000](http://localhost:8000) in your browser. The difference from Scenario 1 is that now the Lambda functions are running in AWS. If you open the developer tools in your browser you will see some of the requests being made to a URL like `https://GATEWAY_RESOURCE_ID.execute-api.us-east-2.amazonaws.com/Prod`. Once you have made several requests this should be noticeably faster than running the code locally on your laptop.
 
 ### Scenario 3: Remote Backend, Remote Frontend - Continuous Delivery
 
@@ -144,11 +142,11 @@ Before this scenario will work, you need to perform a few steps:
 
 > _Friendly reminder to make sure you're logged in with your **midstone** AWS account for this scenario!_
 
-1. Create an S3 bucket: `aws s3 mb s3://nss-s3-c##-u5-project-YOUR.TEAM.NAME` (Replace `c##` with your cohort number, e.g. `c01` for Cohort 1, and replace `YOUR.TEAM.NAME` with your team's name.)
+1. Create a team S3 bucket: `aws s3 mb s3://nss-s3-c##-u5-project-YOUR.TEAM.NAME` (Replace `c##` with your cohort number, e.g. `c01` for Cohort 1, and replace `YOUR.TEAM.NAME` with your team's name.)
 
     > **NOTE:** S3 bucket names must be lower case.
 
-2. Choose a Team Cognito Domain matching the pattern `project-{NAME OF PROJECT}-{TEAM NAME}`  example Cognito Domain: `project-star-gazer-team-awesome`
+2. Choose a team Cognito domain name matching the pattern `project-{NAME OF PROJECT}-{TEAM NAME}`  E.g. `project-star-gazer-team-awesome`
    > **NOTE** If the Cognito domain name contains anything other than lowercase letters, numbers, and hyphens, then the domain name isn't accepted. You can't use a hyphen for the first or last character. The maximum length of the whole domain name, including the dots, is 63 characters.
 
 3. Deploy the Lambda service (aka the backend). _NOTE that the primary purpose of deploying this now (with your group AWS account) is to create several of the resources that we need to plug into the GitHub Actions configuration. This is the only time that you'll deploy manually to your AWS account._:
@@ -167,10 +165,11 @@ Before this scenario will work, you need to perform a few steps:
    - Account details: Select your midstone profile (e.g. `midstone`)
    - Region: `us-east-2` _(this should be the default)_
    - User permissions provider: IAM _(this should be the default)_
-   - "Enter the __ ARN ... or we will create one for you": _leave all of these questions blank_
+   - "Enter the __ ARN ... or we will create one for you": _you'll see a series of these questions, leave all of them blank_
    - "Does your application contain any IMAGE type Lambda functions?": `N` _(this should be the default)_
-   - Confirm the summary, and enter `y` to proceed with creation.
-   - When you see the `Pipeline IAM user credential` output, save the values shown for `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`. You will not be shown these again, but will need to use them in the next step.
+   - Confirm the summary (press Enter)
+   - Enter `y` to proceed with creation
+   - **When you see the `Pipeline IAM user credential` output, save the values shown for `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.** You will not be shown these again, but will need to use them in the next step.
 
    <details>
       <summary><b>Click to see a screen recording of this step...</b></summary>
@@ -182,7 +181,7 @@ Before this scenario will work, you need to perform a few steps:
 
     When you have completed this you should see each of them listed in the "Repository secrets" section of this page. NOTE that you will only see the name of the secret, and not the secret itself. This is expected. 
 
-    > **NOTEs:** 
+    > **NOTES:** 
     > * Remember to use the `COGNITO_USER_POOL_ID` and `COGNITO_USER_POOL_CLIENT_ID` from the deploy you made with the group account (Step 2 of Scenario 3) 
     > * You will also see some "Organization secrets" listed at the bottom of the page like `GH_PACKAGE_REG_READ_PASS` and `GH_PACKAGE_REG_READ_USER` - you do not need to do anything with these.
 
@@ -196,7 +195,7 @@ Before this scenario will work, you need to perform a few steps:
    - Pipeline template: "2 - Custom Pipeline Template Location"
    - Template Git location: `git@github.com:NSS-Software-Engineering/u5-pipeline-template.git`
       > **NOTE:** You can see this repo [here](https://github.com/NSS-Software-Engineering/u5-pipeline-template) if you are interested.
->  - _Several prompts will be given where you can just accept the default by pressing enter._
+   - _Several prompts will be given where you can just accept the default by pressing enter._
    - Stage configuration name: "1" (ServiceStage - you created that earlier).
    - "What is the sam application stack name": provide a descriptive name with no spaces in it; when starting with the example code you might want to use something like `music-playlist-service`, but when you start building your own service you should rename this to something that makes more sense.
    - Next answer a series of "What is the ... ?" questions. Copy/paste the appropriate value that was output from the `sam deploy` command that you ran just above.
