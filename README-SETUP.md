@@ -49,7 +49,7 @@ In this scenario you will run both the backend and frontend locally on your lapt
 
 1. Run the Lambda service (aka the backend):
    - Build the Java code: `sam build`
-   - Choose a Cognito domain name matching the pattern `project-{NAME OF PROJECT}-{FULL NAME}`. E.g. `project-star-gazer-john-doe`. You'll use this in the next several commands.
+   - Choose a Cognito Domain name matching the pattern `project-{NAME OF PROJECT}-{FULL NAME}`. E.g. `project-star-gazer-john-doe`. You'll use this in the next several commands.
       > **NOTE** If the Cognito domain name contains anything other than lowercase letters, numbers, and hyphens, then the domain name isn't accepted. You can't use a hyphen for the first or last character. The maximum length of the whole domain name, including the dots, is 63 characters.
    - Create an S3 bucket: `aws s3 mb s3://nss-s3-c##-u5-project-YOUR.NAME` (Replace `c##` with your cohort number, e.g. `c01` for Cohort 1, and replace `YOUR.NAME` with your first and last name.)
       > **NOTES:** 
@@ -99,7 +99,7 @@ To stop either the local backend (the `sam local...` command) or local frontend 
 
 In this scenario you will deploy the backend to AWS and run the frontend locally on your laptop. You should use your **individual** AWS account in this scenario so that all data in DDB is yours and yours alone.
 
-1. Choose a Cognito domain name matching the pattern `project-{NAME OF PROJECT}-{FULL NAME}`. E.g. `project-star-gazer-john-doe`. If you've already deployed Scenario 1, you can/should use the same Cognito Domain as that. You'll use this in the next several commands.
+1. Choose a Cognito Domain name matching the pattern `project-{NAME OF PROJECT}-{FULL NAME}`. E.g. `project-star-gazer-john-doe`. If you've already deployed Scenario 1, you can/should use the same Cognito Domain as that. You'll use this in the next several commands.
    > **NOTE** If the Cognito domain name contains anything other than lowercase letters, numbers, and hyphens, then the domain name isn't accepted. You can't use a hyphen for the first or last character. The maximum length of the whole domain name, including the dots, is 63 characters.
 
 2. Deploy the Lambda service (aka the backend):
@@ -146,7 +146,7 @@ Before this scenario will work, you need to perform a few steps:
 
     > **NOTE:** S3 bucket names must be lower case.
 
-2. Choose a team Cognito domain name matching the pattern `project-{NAME OF PROJECT}-{TEAM NAME}`  E.g. `project-star-gazer-team-awesome`
+2. Choose a team Cognito Domain name matching the pattern `project-{NAME OF PROJECT}-{TEAM NAME}`  E.g. `project-star-gazer-team-awesome`
    > **NOTE** If the Cognito domain name contains anything other than lowercase letters, numbers, and hyphens, then the domain name isn't accepted. You can't use a hyphen for the first or last character. The maximum length of the whole domain name, including the dots, is 63 characters.
 
 3. Deploy the Lambda service (aka the backend). _NOTE that the primary purpose of deploying this now (with your group AWS account) is to create several of the resources that we need to plug into the GitHub Actions configuration. This is the only time that you'll deploy manually to your AWS account._:
