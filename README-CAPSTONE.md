@@ -1,5 +1,7 @@
 ## Overview
-This document outlines some differences to keep in mind when using this project for your final course capstone project. **If you are working on the midstone project you should ignore this document.**
+This document outlines some differences to keep in mind when using this project for your final course capstone project.
+
+> **If you are working on the midstone project you should ignore this document.**
 
 ## Deployment Scenarios
 Deployment scenarios 1 and 2 will definitely be used during your Capstone development, Scenario 3 _might_ be used if you choose to use GitHub Actions with your Capstone project. We've outlined a fourth scenario here that you'll most likely want to use for the Capstone.
