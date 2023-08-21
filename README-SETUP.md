@@ -198,7 +198,10 @@ Before this scenario will work, you need to perform a few steps:
    - _Several prompts will be given where you can just accept the default by pressing enter._
    - Stage configuration name: "1" (ServiceStage - you created that earlier).
    - "What is the sam application stack name": provide a descriptive name with no spaces in it; when starting with the example code you might want to use something like `music-playlist-service`, but when you start building your own service you should rename this to something that makes more sense.
-   - Next answer a series of "What is the ... ?" questions. Copy/paste the appropriate value that was output from the `sam deploy` command that you ran just above.
+   - "What is the API Gateway URL": API_BASE_URL from `sam deploy` outputs
+   - "What is the Teams Cognito Domain": __TEAM_COGNITO_DOMAIN_FROM_ABOVE__ (don't include ".auth.us-east-2.amazoncognito.com")
+   - "What is the CloudFront Redirect Sign In URL": COGNITO_REDIRECT_SIGNIN from `sam deploy` outputs
+   - "What is the CloudFront Redirect Sign Out URL": COGNITO_REDIRECT_SIGNOUT from `sam deploy` outputs
    - After answering the questions this will create a file `.github/workflows/pipeline.yaml`. If you are rerunning this at a later time, it will ask you if you want to overwrite it, which you will probably want to at that point. And of course you've committed it previously, so it's ok if you overwrite it ... right?!
 
    <details>
