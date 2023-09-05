@@ -244,3 +244,5 @@ Once you (or someone on your team) have performed all the configuration steps ou
    <em>Figure 4. GitHub Action workflow showing the `build-and-package-main` and `deploy-to-aws` jobs running after a PR merge.</em>
 </details>
 
+## Development Notes
+For some additional tips on working with this code base see [README-TIPS.md](./README-TIPS.md).
