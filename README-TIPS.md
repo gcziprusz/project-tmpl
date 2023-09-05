@@ -4,9 +4,18 @@ This document outlines several tips for working with various parts of this codeb
 ## General
 
 - We noted this in [README-SETUP.md](./README-SETUP.md), but wanted to emphasize it again. **You should do all of your development on branches named like `feature/NAME-OF-FEATURE` regardless of what type scenario you are using to deploy/test the software.** Even if you are developing/testing locally, you will end up wanting to deploy it to AWS and the GitHub Actions will only execute on branches that start with `feature`.
+- If you make changes to the frontend code (e.g. Javascript/HTML/CSS code) you do not need to restart the `npm` server - it will automatically detect them. If you change anything in the _configuration_ of the frontend code (e.g. `webpack.config.js` or `package.json`) you will need to stop/restart it.
 - When running the backend code locally, if you make changes to your Java code you'll need to rerun `sam build` to "deploy" those changes to the local Docker containers. Depending on your computer, you might be able to run `sam build` in a different terminal tab while the local API is running, however it's also possible that this won't work and you'll need to stop the local API, rerun `sam build`, and then rerun `sam local start-api`.
 - The way we launch the local API should look familiar to what we've done previously. However, we've added an important argument here: `--warm-containers LAZY`. When you are interacting with your service from a web application you want it to respond as quickly as possible. By adding this argument we tell SAM to keep the Docker containers "warm", that is - don't terminate them after each request. The argument `LAZY` tells it to wait for a request to come in before launching the Docker container. The first time you use each endpoint in the service it will take a few seconds to launch and respond. Successive times that you use the endpoint will be much faster. If you don't include this argument each request will take longer than you want it to.
-- If you make changes to the frontend code (e.g. Javascript/HTML/CSS code) you do not need to restart the `npm` server - it will automatically detect them. If you change anything in the _configuration_ of the frontend code (e.g. `webpack.config.js` or `package.json`) you will need to stop/restart it.
+
+| Files that changed                   |Commands to run|
+|--------------------------------------|--------------|
+| *.java                               |`sam build` and `sam local start-api --warm-containers LAZY`|
+| web/static_assets/\* (*.html, *.css) |n/a|
+| web/src/\*/\*.js                     |n/a|
+| package.json                         |`npm install` and `npm run run-local`|
+| webpack.config.json                  |`npm run run-local`|  
+| template.yaml                        |`sam build` and `sam local start-api --warm-containers LAZY`|
 
 ## Remote Debugging
 Since we're using the `--warm-containers LAZY` argument as noted above, you'll need to add an additional argument to your `sam local` commands if you're wanting to do remote debugging. In addition to the `--debug-port` argument we've used previously, you need to add `--debug-function` to specify which Lambda function you are intending to debug. To debug the `GetPlayistLambda` on port `5005` you'd run the following:
